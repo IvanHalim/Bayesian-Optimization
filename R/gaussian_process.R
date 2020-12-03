@@ -7,13 +7,28 @@ len <- function(x) {
 }
 
 rappend <- function(X, x) {
-  if (is.null(dim(X))) {
+  if (is.null(X)) {
+    X <- x
+  } else if (is.null(dim(X)) & length(x) <= 1) {
     append(X, x)
   } else {
     rbind(X, x)
   }
 }
 
+error_matrix <- NULL
+
+#' Title
+#'
+#' @param x 
+#' @param y 
+#' @param l 
+#' @param sigma_f 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 gaussian_kernel <- function(x, y, l = 1.0, sigma_f = 1.0) {
   if (is.null(dim(x))) {
     sqdist <- outer(x^2, y^2, '+') - 2 * x %*% t(y)
@@ -23,6 +38,19 @@ gaussian_kernel <- function(x, y, l = 1.0, sigma_f = 1.0) {
   sigma_f^2 * exp(-0.5 / l^2 * sqdist)
 }
 
+#' Title
+#'
+#' @param mu 
+#' @param cov 
+#' @param X 
+#' @param X_train 
+#' @param Y_train 
+#' @param samples 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 plot_gp <- function(mu, cov, X, X_train = NULL, Y_train = NULL, samples = NULL) {
   
   # 95% of the area under a gaussian lies within
@@ -51,10 +79,22 @@ plot_gp <- function(mu, cov, X, X_train = NULL, Y_train = NULL, samples = NULL) 
   g
 }
 
+#' Title
+#'
+#' @param X_train 
+#' @param Y_train 
+#' @param noise 
+#' @param kernel 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 nll_fn <- function(X_train, Y_train, noise, kernel) {
   step <- function(theta) {
     K <- kernel(X_train, X_train, l=theta[1], sigma_f=theta[2]) +
       noise^2 * diag(len(X_train))
+    error_matrix <<- K
     
     # Compute determinant via Cholesky decomposition
     # log(det(A)) = 2 * sum(log(diag(L)))
@@ -66,6 +106,17 @@ nll_fn <- function(X_train, Y_train, noise, kernel) {
   return(step)
 }
 
+#' Title
+#'
+#' @param l 
+#' @param sigma_f 
+#' @param sigma_y 
+#' @param kern 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 gpr.init <- function(l=1.0, sigma_f=1.0, sigma_y=0, kern=gaussian_kernel) {
   list("X_train" = NULL,
        "Y_train" = NULL,
@@ -76,13 +127,26 @@ gpr.init <- function(l=1.0, sigma_f=1.0, sigma_y=0, kern=gaussian_kernel) {
        )
 }
 
+#' Title
+#'
+#' @param X_train 
+#' @param Y_train 
+#' @param gpr 
+#' @param lower 
+#' @param upper 
+#' @param n_restarts 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 gpr.fit <- function(X_train, Y_train, gpr, lower=c(1e-5, 1e-5),
-                    upper=c(3, 3), n_restarts=25) {
+                    upper=c(9, 9), n_restarts=25) {
   
   gpr$X_train <- X_train
   gpr$Y_train <- Y_train
   
-  min_val <- 1e+6
+  min_val <- Inf
   min_x <- NULL
   
   for (i in 1:n_restarts) {
@@ -102,6 +166,15 @@ gpr.fit <- function(X_train, Y_train, gpr, lower=c(1e-5, 1e-5),
   gpr
 }
 
+#' Title
+#'
+#' @param X 
+#' @param gpr 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 gpr.predict <- function(X, gpr) {
   
   X_train <- gpr$X_train
@@ -114,6 +187,7 @@ gpr.predict <- function(X, gpr) {
   K <- kernel(X_train, X_train, l, sigma_f) + sigma_y^2 * diag(len(X_train))
   K_s <- kernel(X_train, X, l, sigma_f)
   K_ss <- kernel(X, X, l, sigma_f) + 1e-8 * diag(len(X))
+  error_matrix <<- K
   K_inv <- solve(K) #O(n^3)
   
   # Equation (4)
