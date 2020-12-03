@@ -51,13 +51,6 @@ plot_gp <- function(mu, cov, X, X_train = NULL, Y_train = NULL, samples = NULL) 
   g
 }
 
-plot_acquisition <- function(X, EI, X_next) {
-  ggplot(data=data.frame(x = X, y = EI), aes(x, y)) +
-    geom_line(color = "red", size = 0.7) +
-    geom_vline(xintercept = X_next, linetype = "dashed") +
-    theme_minimal()
-}
-
 nll_fn <- function(X_train, Y_train, noise, kernel) {
   step <- function(theta) {
     K <- kernel(X_train, X_train, l=theta[1], sigma_f=theta[2]) +
