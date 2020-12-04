@@ -16,8 +16,6 @@ rappend <- function(X, x) {
   }
 }
 
-error_matrix <- NULL
-
 #' Title
 #'
 #' @param x 
@@ -94,7 +92,6 @@ nll_fn <- function(X_train, Y_train, noise, kernel) {
   step <- function(theta) {
     K <- kernel(X_train, X_train, l=theta[1], sigma_f=theta[2]) +
       noise^2 * diag(len(X_train))
-    error_matrix <<- K
     
     # Compute determinant via Cholesky decomposition
     # log(det(A)) = 2 * sum(log(diag(L)))

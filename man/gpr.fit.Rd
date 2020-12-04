@@ -9,7 +9,7 @@ gpr.fit(
   Y_train,
   gpr,
   lower = c(1e-05, 1e-05),
-  upper = c(3, 3),
+  upper = c(9, 9),
   n_restarts = 25
 )
 }

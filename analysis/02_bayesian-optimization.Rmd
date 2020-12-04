@@ -1,5 +1,5 @@
 ---
-title: "Acquisition functions"
+title: "Bayesian Optimization"
 author: "Ivan Timothy Halim"
 date: "12/2/2020"
 output: github_document
@@ -11,7 +11,9 @@ library(gridExtra)
 devtools::load_all()
 ```
 
-# Acquisition functions
+# Bayesian Optimization
+
+## Acquisition functions
 
 Proposing sampling points in the search space is done by acquisition functions. They trade off exploitation and exploration. Exploitation means sampling where the surrogate model predicts a high objective and exploration means sampling at locations where the prediction uncertainty is high. Both correspond to high acquisition function values and the goal is to maximize the acquisition function to determine the next sampling point.
 

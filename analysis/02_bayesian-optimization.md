@@ -1,9 +1,11 @@
-Acquisition functions
+Bayesian Optimization
 ================
 Ivan Timothy Halim
 12/2/2020
 
-# Acquisition functions
+# Bayesian Optimization
+
+## Acquisition functions
 
 Proposing sampling points in the search space is done by acquisition
 functions. They trade off exploitation and exploration. Exploitation
@@ -125,7 +127,7 @@ ggplot(eval, aes(X, Y)) +
     theme_minimal()
 ```
 
-![](02_acquisition-function_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](02_bayesian-optimization_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
 Goal is to find the global optimum on the left in a small number of
 steps. The next step is to implement the acquisition function defined in
@@ -257,4 +259,4 @@ for (i in 1:n_iter) {
 }
 ```
 
-![](02_acquisition-function_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->![](02_acquisition-function_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->![](02_acquisition-function_files/figure-gfm/unnamed-chunk-6-3.png)<!-- -->![](02_acquisition-function_files/figure-gfm/unnamed-chunk-6-4.png)<!-- -->![](02_acquisition-function_files/figure-gfm/unnamed-chunk-6-5.png)<!-- -->![](02_acquisition-function_files/figure-gfm/unnamed-chunk-6-6.png)<!-- -->![](02_acquisition-function_files/figure-gfm/unnamed-chunk-6-7.png)<!-- -->![](02_acquisition-function_files/figure-gfm/unnamed-chunk-6-8.png)<!-- -->![](02_acquisition-function_files/figure-gfm/unnamed-chunk-6-9.png)<!-- -->![](02_acquisition-function_files/figure-gfm/unnamed-chunk-6-10.png)<!-- -->
+![](02_bayesian-optimization_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->![](02_bayesian-optimization_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->![](02_bayesian-optimization_files/figure-gfm/unnamed-chunk-6-3.png)<!-- -->![](02_bayesian-optimization_files/figure-gfm/unnamed-chunk-6-4.png)<!-- -->![](02_bayesian-optimization_files/figure-gfm/unnamed-chunk-6-5.png)<!-- -->![](02_bayesian-optimization_files/figure-gfm/unnamed-chunk-6-6.png)<!-- -->![](02_bayesian-optimization_files/figure-gfm/unnamed-chunk-6-7.png)<!-- -->![](02_bayesian-optimization_files/figure-gfm/unnamed-chunk-6-8.png)<!-- -->![](02_bayesian-optimization_files/figure-gfm/unnamed-chunk-6-9.png)<!-- -->![](02_bayesian-optimization_files/figure-gfm/unnamed-chunk-6-10.png)<!-- -->
