@@ -1,7 +1,5 @@
-README
+Portfolio Allocation using Bayesian Optimization
 ================
-
-# Bayesian Optimization
 
 The purpose of this project is to gain a deeper understanding of
 Bayesian Optimization and its practical application in data analysis and
@@ -32,8 +30,8 @@ minimize the number of samples drawn from the black box function \(f\).
     for this simulation. Data is imported from Kaggle (
     <https://www.kaggle.com/dgawlik/nyse> ).
 
-  - The `R` folder contains the scripts for the functions required to
-    execute the simulation.
+  - The `R` folder contains the R functions used to run Bayesian
+    Optimization
 
   - The `reports` folder contains deliverables such as project proposal
     and final report.
@@ -41,43 +39,43 @@ minimize the number of samples drawn from the black box function \(f\).
   - The `results` folder contains files generated files generated during
     clean-up and analysis as well as the final result of the simulation.
 
-  - The man and R directories include the R functions used to run
-    Bayesian Optimizaiton as well as documentation for the functions.
-    Documentation for each function can be rendered using the standard R
-    syntax (e.g. ?function()).
+  - The `man` folder contains documentation for the functions defined in
+    the `R` folder. Documentation for each function can be rendered
+    using the standard R syntax (e.g. `?function`).
 
 ## Gaussian Process
 
 Gaussian Process is a probabilistic model to approximate based on a
 given set of data points. Gaussian Process models a function as a set of
 random variables whose joint distribution is a multivariate normal
-distribution, with a specific mean vector and covariance matrix.
+distribution, with a specific mean vector and covariance
+matrix.
 
-\[
-f(x_{1:k}) \sim \mathcal{N}(\mu(x_{1:k}), \Sigma(x_{1:k},x_{1:k}))
-\]
+![equation](https://latex.codecogs.com/gif.latex?f%28x_%7B1%3Ak%7D%29%20%5Csim%20%5Cmathcal%7BN%7D%28%5Cmu%28x_%7B1%3Ak%7D%29%2C%20%5CSigma%28x_%7B1%3Ak%7D%2Cx_%7B1%3Ak%7D%29%29)
 
 Where,
 
-  - \(\mathcal{N}(x,y)\): Gaussian/Normal random distribution
-  - \(\mu(x_{i:k})\): Mean vector of each \(f(x_i)\)
-  - \(\Sigma(x_{i:k}, x_{i:K})\): Covariance matrix of each pair of
-    \(f(x_i)\)
+  - ![equation](https://latex.codecogs.com/gif.latex?%5Cmathcal%7BN%7D%28x%2Cy%29):
+    Gaussian/Normal random
+    distribution
+  - ![equation](https://latex.codecogs.com/gif.latex?%5Cmu%28x_%7Bi%3Ak%7D%29):
+    Mean vector of each
+    ![equation](https://latex.codecogs.com/gif.latex?f%28x_i%29)
+  - ![equation](https://latex.codecogs.com/gif.latex?%5CSigma%28x_%7Bi%3Ak%7D%2C%20x_%7Bi%3AK%7D%29):
+    Covariance matrix of each pair of
+    ![equation](https://latex.codecogs.com/gif.latex?f%28x_i%29)
 
 For a candidate point \(x'\), its function value \(f(x')\) can be
 approximated, given a set of observed values \(f(x_{1:n})\), using the
-posterior distribution,
+posterior
+distribution,
 
-\[
-f(x)|f(x_{1:n}) \sim \mathcal{N}(\mu_n(x), \sigma_n^2(x))
-\]
+![equation](https://latex.codecogs.com/gif.latex?f%28x%29%7Cf%28x_%7B1%3An%7D%29%20%5Csim%20%5Cmathcal%7BN%7D%28%5Cmu_n%28x%29%2C%20%5Csigma_n%5E2%28x%29%29)
 
 Where,
 
-\[
-\mu_n(x) = \Sigma_0(x,x_{i:n}) \ast \Sigma_0(x_{i:n},x_{i:n})^{-1} \ast (f(x_{1:n}) - \mu_0(x_{1:n})) + \mu_0(x) \\
-\sigma_n^2(x) = \Sigma_0(x,x) - \Sigma_0(x, x_{i:n}) \ast \Sigma_0(x_{i:n},x_{i:n})^{-1} \ast \Sigma_0(x_{i:n},x)
-\]
+  - ![equation](https://latex.codecogs.com/gif.latex?%5Cmu_n%28x%29%20%3D%20%5CSigma_0%28x%2Cx_%7Bi%3An%7D%29%20%5Cast%20%5CSigma_0%28x_%7Bi%3An%7D%2Cx_%7Bi%3An%7D%29%5E%7B-1%7D%20%5Cast%20%28f%28x_%7B1%3An%7D%29%20-%20%5Cmu_0%28x_%7B1%3An%7D%29%29%20+%20%5Cmu_0%28x%29)
+  - ![equation](https://latex.codecogs.com/gif.latex?%5Csigma_n%5E2%28x%29%20%3D%20%5CSigma_0%28x%2Cx%29%20-%20%5CSigma_0%28x%2C%20x_%7Bi%3An%7D%29%20%5Cast%20%5CSigma_0%28x_%7Bi%3An%7D%2Cx_%7Bi%3An%7D%29%5E%7B-1%7D%20%5Cast%20%5CSigma_0%28x_%7Bi%3An%7D%2Cx%29)
 
 Below is the example of Gaussian Process posterior over function graph.
 The following example draws three samples from the posterior and plots
