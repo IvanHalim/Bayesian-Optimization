@@ -55,7 +55,7 @@ Let's run the algorithm `bayesian_optimization()` that we implemented. The param
 * `init_grid_dt`: user specified points to sample the target function
 * `init_points`: Number of randomly chosen points to sample the target function before Bayesian Optimization fitting the Gaussian Process
 * `n_iter`: number of repeated Bayesian Optimization
-* `xi`: tunable parameter $\xi$ of Expected Improvement, to balance exploitation against exploration, increasing `xi` will make the optimized hyper parameters more spread out across the whole range
+* `xi`: tunable parameter ![equation](https://latex.codecogs.com/gif.latex?%5Cxi) of Expected Improvement, to balance exploitation against exploration, increasing `xi` will make the optimized hyper parameters more spread out across the whole range
 * `noise`: represents the amount of noise in the training data
 * `max`: specifies whether we're maximizing or minimizing a function
 * `acq`: choice of acquisition function (Expected Improvement by default)
@@ -83,7 +83,7 @@ Let's check the total weight of the optimum result.
 ```{r}
 sum(bayes_finance$par)
 ```
-The sum slightly exceeds 1, which is probably the reason why our Sharpe's Ratio is negative. More work can be done to improve sampling for next $x$ as well as finding the optimum value for parameters $l$ and $\sigma_f$. 
+The sum slightly exceeds 1, which is probably the reason why our Sharpe's Ratio is negative. More work can be done to improve sampling for next ![equation](https://latex.codecogs.com/gif.latex?x) as well as finding the optimum value for parameters ![equation](https://latex.codecogs.com/gif.latex?l) and ![equation](https://latex.codecogs.com/gif.latex?%5Csigma_f). 
 
 Based on Bayesian Optimization, here is how your asset should be distributed.
 
@@ -226,14 +226,14 @@ For this problem, PSO works better than Bayesian Optimization, indicated by the 
 
 ## Normalization
 
-We could also normalize our search grid to ensure that the weights don't add up to more than 1, therefore not violating the constraint.
+We could also normalize our search grid to ensure that the weights don't add up to more than 1, therefore not violating the constraint. We're only going to normalize the first 15 rows of the search grid, to balance the number of data points that don't violate the constraint and those that do violate the constraint.
 
 ```{r}
-normalized_search_grid <- normalize(search_grid)
+search_grid[1:15,] <- normalize(search_grid[1:15,])
 (bayes_finance_norm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
-                                        init_grid_dt=normalized_search_grid, init_points=0, n_iter=1))
+                                        init_grid_dt=search_grid, init_points=0))
 ```
-The solution has a Sharpe Ratio of `r round(bayes_finance_norm$value, 4)`. We achieve a higher performance than both `rBayesianOptimization` and Particle Swarm Optimization, and in just one iteration!
+The solution has a Sharpe Ratio of `r round(bayes_finance_norm$value, 4)`. We achieve a higher performance than both `rBayesianOptimization` and Particle Swarm Optimization!
 
 Based on normalized Bayes, here is how your asset should be distributed.
 

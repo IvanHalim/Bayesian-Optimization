@@ -480,31 +480,30 @@ function evaluation is cheap.
 #### Normalization
 
 We could also normalize our search grid to ensure that the weights don’t
-add up to more than 1, therefore not violating the constraint.
+add up to more than 1, therefore not violating the constraint. We're only going to normalize the first 15 rows of the search grid, to balance the number of data points that don't violate the constraint vs those that do violate the constraint.
 
 ``` r
-normalized_search_grid <- normalize(search_grid)
+search_grid[1:15,] <- normalize(search_grid[1:15,])
 bayes_finance_norm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
-                                        init_grid_dt=normalized_search_grid, init_points=0, n_iter=1)
+                                        init_grid_dt=search_grid, init_points=0)
 ```
 
     ## $par
-    ##        w1        w2        w3 
-    ## 0.1336571 0.1222349 0.7441080 
+    ##         w1         w2         w3 
+    ## 0.14949415 0.03575043 0.81475542 
     ## 
     ## $value
-    ## [1] 20.13238
+    ## [1] 19.69707
 
 The solution has a Sharpe Ratio of 20.1324. We achieve a higher
-performance than both `rBayesianOptimization` and Particle Swarm Optimization,
-and in just one iteration\!
+performance than both `rBayesianOptimization` and Particle Swarm Optimization\!
 
 Based on normalized Bayes, here is how your asset should be distributed.
 
     ##   stock                             Security weight
-    ## 1  ULTA Ulta Salon Cosmetics & Fragrance Inc 74.41%
-    ## 2   NFX              Newfield Exploration Co 13.37%
-    ## 3  ORLY                  O'Reilly Automotive 12.22%
+    ## 1  ULTA Ulta Salon Cosmetics & Fragrance Inc 81.48%
+    ## 2   NFX              Newfield Exploration Co 14.95%
+    ## 3  ORLY                  O'Reilly Automotive  3.58%
 
 ### References
 

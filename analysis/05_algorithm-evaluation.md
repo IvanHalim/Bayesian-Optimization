@@ -47,9 +47,11 @@ The parameters include:
   - `init_points`: Number of randomly chosen points to sample the target
     function before Bayesian Optimization fitting the Gaussian Process
   - `n_iter`: number of repeated Bayesian Optimization
-  - `xi`: tunable parameter \(\xi\) of Expected Improvement, to balance
-    exploitation against exploration, increasing `xi` will make the
-    optimized hyper parameters more spread out across the whole range
+  - `xi`: tunable parameter
+    ![equation](https://latex.codecogs.com/gif.latex?%5Cxi) of Expected
+    Improvement, to balance exploitation against exploration, increasing
+    `xi` will make the optimized hyper parameters more spread out across
+    the whole range
   - `noise`: represents the amount of noise in the training data
   - `max`: specifies whether we’re maximizing or minimizing a function
   - `acq`: choice of acquisition function (Expected Improvement by
@@ -97,8 +99,10 @@ sum(bayes_finance$par)
 
 The sum slightly exceeds 1, which is probably the reason why our
 Sharpe’s Ratio is negative. More work can be done to improve sampling
-for next \(x\) as well as finding the optimum value for parameters \(l\)
-and \(\sigma_f\).
+for next ![equation](https://latex.codecogs.com/gif.latex?x) as well as
+finding the optimum value for parameters
+![equation](https://latex.codecogs.com/gif.latex?l) and
+![equation](https://latex.codecogs.com/gif.latex?%5Csigma_f).
 
 Based on Bayesian Optimization, here is how your asset should be
 distributed.
@@ -158,7 +162,7 @@ rbayes_finance <- BayesianOptimization(FUN = fitness, bounds = search_bound,
                      n_iter = 10, acq = "ei")
 ```
 
-    ## elapsed = 0.02   Round = 1   w1 = 0.2876 w2 = 0.8895 w3 = 0.1428 Value = -1.023468e+08 
+    ## elapsed = 0.00   Round = 1   w1 = 0.2876 w2 = 0.8895 w3 = 0.1428 Value = -1.023468e+08 
     ## elapsed = 0.00   Round = 2   w1 = 0.7883 w2 = 0.6928 w3 = 0.4145 Value = -8.021977e+08 
     ## elapsed = 0.00   Round = 3   w1 = 0.4090 w2 = 0.6405 w3 = 0.4137 Value = -2.145617e+08 
     ## elapsed = 0.00   Round = 4   w1 = 0.8830 w2 = 0.9943 w3 = 0.3688 Value = -1.552847e+09 
@@ -322,24 +326,27 @@ function evaluation is cheap.
 ## Normalization
 
 We could also normalize our search grid to ensure that the weights don’t
-add up to more than 1, therefore not violating the constraint.
+add up to more than 1, therefore not violating the constraint. We’re
+only going to normalize the first 15 rows of the search grid, to balance
+the number of data points that don’t violate the constraint and those
+that do violate the constraint.
 
 ``` r
-normalized_search_grid <- normalize(search_grid)
+search_grid[1:15,] <- normalize(search_grid[1:15,])
 (bayes_finance_norm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
-                                        init_grid_dt=normalized_search_grid, init_points=0, n_iter=1))
+                                        init_grid_dt=search_grid, init_points=0))
 ```
 
     ## $par
-    ##        w1        w2        w3 
-    ## 0.1336571 0.1222349 0.7441080 
+    ##         w1         w2         w3 
+    ## 0.14949415 0.03575043 0.81475542 
     ## 
     ## $value
-    ## [1] 20.13238
+    ## [1] 19.69707
 
-The solution has a Sharpe Ratio of 20.1324. We achieve a higher
+The solution has a Sharpe Ratio of 19.6971. We achieve a higher
 performance than both `rBayesianOptimization` and Particle Swarm
-Optimization, and in just one iteration\!
+Optimization\!
 
 Based on normalized Bayes, here is how your asset should be distributed.
 
@@ -353,9 +360,9 @@ Based on normalized Bayes, here is how your asset should be distributed.
 ```
 
     ##   stock                             Security weight
-    ## 1  ULTA Ulta Salon Cosmetics & Fragrance Inc 74.41%
-    ## 2   NFX              Newfield Exploration Co 13.37%
-    ## 3  ORLY                  O'Reilly Automotive 12.22%
+    ## 1  ULTA Ulta Salon Cosmetics & Fragrance Inc 81.48%
+    ## 2   NFX              Newfield Exploration Co 14.95%
+    ## 3  ORLY                  O'Reilly Automotive  3.58%
 
 ``` r
 write_csv(bayes_result, here("results", "bayes_result.csv"))
