@@ -53,29 +53,30 @@ random variables whose joint distribution is a multivariate normal
 distribution, with a specific mean vector and covariance
 matrix.
 
-![equation](https://latex.codecogs.com/gif.latex?f%28x_%7B1%3Ak%7D%29%20%5Csim%20%5Cmathcal%7BN%7D%28%5Cmu%28x_%7B1%3Ak%7D%29%2C%20%5CSigma%28x_%7B1%3Ak%7D%2Cx_%7B1%3Ak%7D%29%29)
+![equation](https://latex.codecogs.com/gif.latex?f%28x_%7B1%3Ak%7D%29%20%5Csim%20%5Cmathcal%7BN%7D%28%5Cmu_0%28x_%7B1%3Ak%7D%29%2C%20%5CSigma_0%28x_%7B1%3Ak%7D%2Cx_%7B1%3Ak%7D%29%29)
 
 Where,
 
   - ![equation](https://latex.codecogs.com/gif.latex?%5Cmathcal%7BN%7D%28x%2Cy%29):
     Gaussian/Normal random
     distribution
-  - ![equation](https://latex.codecogs.com/gif.latex?%5Cmu%28x_%7Bi%3Ak%7D%29):
-    Mean vector of each
-    ![equation](https://latex.codecogs.com/gif.latex?f%28x_i%29)
-  - ![equation](https://latex.codecogs.com/gif.latex?%5CSigma%28x_%7Bi%3Ak%7D%2C%20x_%7Bi%3AK%7D%29):
-    Covariance matrix of each pair of
-    ![equation](https://latex.codecogs.com/gif.latex?f%28x_i%29)
+  - ![equation](https://latex.codecogs.com/gif.latex?%5Cmu_0%28x_%7Bi%3Ak%7D%29):
+    Mean function of each
+    ![equation](https://latex.codecogs.com/gif.latex?x_i). It is common to use
+    ![equation](https://latex.codecogs.com/gif.latex?m%28x%29%20%3D%200) as  Gaussian Process is flexible enough to model the mean arbitrarily well
+  - ![equation](https://latex.codecogs.com/gif.latex?%5CSigma_0%28x_%7Bi%3Ak%7D%2C%20x_%7Bi%3AK%7D%29):
+    Kernel function/covariance function at each pair of
+    ![equation](https://latex.codecogs.com/gif.latex?x_i)
 
 For a candidate point
-![equation](https://latex.codecogs.com/gif.latex?x%27), its function
-value ![equation](https://latex.codecogs.com/gif.latex?f%28x%27%29) can
+![equation](https://latex.codecogs.com/gif.latex?x), its function
+value ![equation](https://latex.codecogs.com/gif.latex?f%28x%29) can
 be approximated, given a set of observed values
 ![equation](https://latex.codecogs.com/gif.latex?f%28x_%7B1%3An%7D%29),
 using the posterior
 distribution,
 
-![equation](https://latex.codecogs.com/gif.latex?f%28x%27%29%7Cf%28x_%7B1%3An%7D%29%20%5Csim%20%5Cmathcal%7BN%7D%28%5Cmu_n%28x%29%2C%20%5Csigma_n%5E2%28x%29%29)
+![equation](https://latex.codecogs.com/gif.latex?f%28x%29%7Cf%28x_%7B1%3An%7D%29%20%5Csim%20%5Cmathcal%7BN%7D%28%5Cmu_n%28x%29%2C%20%5Csigma_n%5E2%28x%29%29)
 
 Where,
 
