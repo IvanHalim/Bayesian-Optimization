@@ -292,6 +292,17 @@ maximizing the expected return and at the same time minimizing the risk.
 
 ### Algorithm Evaluation
 
+We're going to test our algorithm on the New York Stock Exchange dataset and compare our
+performance to the one obtained using `rBayesianOptimization` package and the Particle Swarm Optimization algorithm.
+
+Suppose I have assets in 3 different randomly chosen stocks, in this case they are,
+
+* `NFX`: Newfield Exploration Co
+* `ORLY`: O'Reilly Automotive
+* `ULTA`: Ulta Salon Cosmetics & Fragrance Inc
+
+How should I distribute my assets in such a way that maximizes the Sharpe Ratio, given the constraints?
+
 #### Implementation from scratch
 
 Let’s run the algorithm `bayesian_optimization()` that we implemented.
