@@ -477,6 +477,35 @@ Optimization, compared to PSO, which run more than 1000 evaluations. The
 trade-off is Bayesian Optimization ran slower than PSO, since the
 function evaluation is cheap.
 
+#### Normalization
+
+We could also normalize our search grid to ensure that the weights don’t
+add up to more than 1, therefore not violating the constraint.
+
+``` r
+normalized_search_grid <- normalize(search_grid)
+bayes_finance_norm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
+                                        init_grid_dt=normalized_search_grid, init_points=0, n_iter=1)
+```
+
+    ## $par
+    ##        w1        w2        w3 
+    ## 0.1336571 0.1222349 0.7441080 
+    ## 
+    ## $value
+    ## [1] 20.13238
+
+The solution has a Sharpe Ratio of 20.1324. We achieve a higher
+performance than `rBayesianOptimization` or Particle Swarm Optimization,
+and in just one iteration\!
+
+Based on normalized Bayes, here is how your asset should be distributed.
+
+    ##   stock                             Security weight
+    ## 1  ULTA Ulta Salon Cosmetics & Fragrance Inc 74.41%
+    ## 2   NFX              Newfield Exploration Co 13.37%
+    ## 3  ORLY                  O'Reilly Automotive 12.22%
+
 ### References
 
 [1] Martin Krasser. [Gaussian Processes](https://krasserm.github.io/2018/03/19/gaussian-processes/)<br />

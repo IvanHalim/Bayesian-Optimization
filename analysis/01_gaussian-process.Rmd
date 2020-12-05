@@ -333,8 +333,6 @@ X_2D_train <- as.matrix(
 Y_2D_train <- sin(0.5 * sqrt(X_2D_train[,1]^2 + X_2D_train[,2]^2)) +
               noise_2D * rnorm(len(X_2D_train))
 
-plot_list <- list()
-
 result <- posterior_predictive(X_2D, X_2D_train, Y_2D_train, gaussian_kernel, sigma_y=noise_2D)
 mu_s <- array(result$mu_s, c(length(rx), length(rx)))
 

@@ -138,7 +138,7 @@ gpr.init <- function(l=1.0, sigma_f=1.0, sigma_y=0, kern=gaussian_kernel) {
 #'
 #' @examples
 gpr.fit <- function(X_train, Y_train, gpr, lower=c(1e-5, 1e-5),
-                    upper=c(9, 9), n_restarts=25) {
+                    upper=c(2, 2), n_restarts=25) {
   
   gpr$X_train <- X_train
   gpr$Y_train <- Y_train
@@ -195,4 +195,8 @@ gpr.predict <- function(X, gpr) {
   
   result <- list("mu_s" = mu_s, "cov_s" = cov_s)
   return(result)
+}
+
+normalize <- function(X) {
+  sweep(X, 1, rowSums(X), FUN="/")
 }

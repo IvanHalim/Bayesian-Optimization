@@ -59,15 +59,15 @@ The parameters include:
 
 ``` r
 (bayes_finance <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
-                                          init_grid_dt=search_grid, init_points=10))
+                                        init_grid_dt=search_grid, init_points=10))
 ```
 
     ## $par
     ##        w1        w2        w3 
-    ## 0.0000000 0.3993419 0.6012236 
+    ## 0.0000000 0.3993422 0.6012231 
     ## 
     ## $value
-    ## [1] -304.2126
+    ## [1] -304.0334
 
 Result of the function consists of a list with 2 components:
 
@@ -80,7 +80,7 @@ So, what is the optimum Sharpe Ratio from Bayesian optimization?
 bayes_finance$value
 ```
 
-    ## [1] -304.2126
+    ## [1] -304.0334
 
 The greater a portfolio’s Sharpe ratio, the better its risk-adjusted
 performance. If the analysis results in a negative Sharpe ratio, it
@@ -93,7 +93,7 @@ Let’s check the total weight of the optimum result.
 sum(bayes_finance$par)
 ```
 
-    ## [1] 1.000566
+    ## [1] 1.000565
 
 The sum slightly exceeds 1, which is probably the reason why our
 Sharpe’s Ratio is negative. More work can be done to improve sampling
@@ -150,15 +150,15 @@ fitness <- function(w1, w2, w3) {
 ``` r
 search_bound <- list(w1 = c(0,1), w2 = c(0,1),
                      w3 = c(0,1))
-search_grid <- data.frame(search_grid)
+search_grid_df <- data.frame(search_grid)
 
 set.seed(1)
 rbayes_finance <- BayesianOptimization(FUN = fitness, bounds = search_bound, 
-                     init_grid_dt = search_grid, init_points = 0, 
+                     init_grid_dt = search_grid_df, init_points = 0, 
                      n_iter = 10, acq = "ei")
 ```
 
-    ## elapsed = 0.01   Round = 1   w1 = 0.2876 w2 = 0.8895 w3 = 0.1428 Value = -1.023468e+08 
+    ## elapsed = 0.02   Round = 1   w1 = 0.2876 w2 = 0.8895 w3 = 0.1428 Value = -1.023468e+08 
     ## elapsed = 0.00   Round = 2   w1 = 0.7883 w2 = 0.6928 w3 = 0.4145 Value = -8.021977e+08 
     ## elapsed = 0.00   Round = 3   w1 = 0.4090 w2 = 0.6405 w3 = 0.4137 Value = -2.145617e+08 
     ## elapsed = 0.00   Round = 4   w1 = 0.8830 w2 = 0.9943 w3 = 0.3688 Value = -1.552847e+09 
@@ -319,8 +319,47 @@ Optimization, compared to PSO, which run more than 1000 evaluations. The
 trade-off is Bayesian Optimization ran slower than PSO, since the
 function evaluation is cheap.
 
+## Normalization
+
+We could also normalize our search grid to ensure that the weights don’t
+add up to more than 1, therefore not violating the constraint.
+
+``` r
+normalized_search_grid <- normalize(search_grid)
+(bayes_finance_norm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
+                                        init_grid_dt=normalized_search_grid, init_points=0, n_iter=1))
+```
+
+    ## $par
+    ##        w1        w2        w3 
+    ## 0.1336571 0.1222349 0.7441080 
+    ## 
+    ## $value
+    ## [1] 20.13238
+
+The solution has a Sharpe Ratio of 20.1324. We achieve a higher
+performance than `rBayesianOptimization` or Particle Swarm Optimization,
+and in just one iteration\!
+
+Based on normalized Bayes, here is how your asset should be distributed.
+
+``` r
+(bayes_norm_result <- data.frame(stock = unique(nyse$symbol),
+                                 weight = bayes_finance_norm$par) %>%
+                  arrange(desc(weight)) %>%
+                  mutate(weight = percent(weight, accuracy = 0.01)) %>%
+                  left_join(securities, by = "stock") %>%
+                  select(stock, Security, everything()))
+```
+
+    ##   stock                             Security weight
+    ## 1  ULTA Ulta Salon Cosmetics & Fragrance Inc 74.41%
+    ## 2   NFX              Newfield Exploration Co 13.37%
+    ## 3  ORLY                  O'Reilly Automotive 12.22%
+
 ``` r
 write_csv(bayes_result, here("results", "bayes_result.csv"))
 write_csv(rbayes_result, here("results", "rbayes_result.csv"))
 write_csv(pso_result, here("results", "pso_result.csv"))
+write_csv(bayes_norm_result, here("results", "bayes_norm_result.csv"))
 ```

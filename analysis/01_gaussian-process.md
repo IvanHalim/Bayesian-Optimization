@@ -376,14 +376,14 @@ nll_fn <- function(X_train, Y_train, noise, kernel) {
 ```
 
     ## $par
-    ## [1] 1.0934625 0.6414891
+    ## [1] 0.8055183 0.4922088
     ## 
     ## $value
-    ## [1] 6.466856
+    ## [1] 6.542562
     ## 
     ## $counts
     ## function gradient 
-    ##       10       10 
+    ##       12       12 
     ## 
     ## $convergence
     ## [1] 0
@@ -438,8 +438,6 @@ X_2D_train <- as.matrix(
 
 Y_2D_train <- sin(0.5 * sqrt(X_2D_train[,1]^2 + X_2D_train[,2]^2)) +
               noise_2D * rnorm(len(X_2D_train))
-
-plot_list <- list()
 
 result <- posterior_predictive(X_2D, X_2D_train, Y_2D_train, gaussian_kernel, sigma_y=noise_2D)
 mu_s <- array(result$mu_s, c(length(rx), length(rx)))
