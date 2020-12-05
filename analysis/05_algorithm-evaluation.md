@@ -58,9 +58,16 @@ The parameters include:
 <!-- end list -->
 
 ``` r
-bayes_finance <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
-                                          init_grid_dt=search_grid, init_points=10)
+(bayes_finance <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
+                                          init_grid_dt=search_grid, init_points=10))
 ```
+
+    ## $par
+    ##        w1        w2        w3 
+    ## 0.0000000 0.3993419 0.6012236 
+    ## 
+    ## $value
+    ## [1] -304.2126
 
 Result of the function consists of a list with 2 components:
 
@@ -151,12 +158,12 @@ rbayes_finance <- BayesianOptimization(FUN = fitness, bounds = search_bound,
                      n_iter = 10, acq = "ei")
 ```
 
-    ## elapsed = 0.03   Round = 1   w1 = 0.2876 w2 = 0.8895 w3 = 0.1428 Value = -1.023468e+08 
+    ## elapsed = 0.01   Round = 1   w1 = 0.2876 w2 = 0.8895 w3 = 0.1428 Value = -1.023468e+08 
     ## elapsed = 0.00   Round = 2   w1 = 0.7883 w2 = 0.6928 w3 = 0.4145 Value = -8.021977e+08 
     ## elapsed = 0.00   Round = 3   w1 = 0.4090 w2 = 0.6405 w3 = 0.4137 Value = -2.145617e+08 
     ## elapsed = 0.00   Round = 4   w1 = 0.8830 w2 = 0.9943 w3 = 0.3688 Value = -1.552847e+09 
     ## elapsed = 0.00   Round = 5   w1 = 0.9405 w2 = 0.6557 w3 = 0.1524 Value = -5.604287e+08 
-    ## elapsed = 0.02   Round = 6   w1 = 0.0456 w2 = 0.7085 w3 = 0.1388 Value = -1.147189e+07 
+    ## elapsed = 0.00   Round = 6   w1 = 0.0456 w2 = 0.7085 w3 = 0.1388 Value = -1.147189e+07 
     ## elapsed = 0.00   Round = 7   w1 = 0.5281 w2 = 0.5441 w3 = 0.2330 Value = -9.315046e+07 
     ## elapsed = 0.00   Round = 8   w1 = 0.8924 w2 = 0.5941 w3 = 0.4660 Value = -9.073010e+08 
     ## elapsed = 0.00   Round = 9   w1 = 0.5514 w2 = 0.2892 w3 = 0.2660 Value = -1.135660e+07 
@@ -172,7 +179,7 @@ rbayes_finance <- BayesianOptimization(FUN = fitness, bounds = search_bound,
     ## elapsed = 0.00   Round = 19  w1 = 0.3279 w2 = 0.3182 w3 = 0.8950 Value = -2.928402e+08 
     ## elapsed = 0.00   Round = 20  w1 = 0.9545 w2 = 0.2316 w3 = 0.3745 Value = -3.142636e+08 
     ## elapsed = 0.00   Round = 21  w1 = 0.9749 w2 = 0.0000 w3 = 0.0000 Value = -6.276665e+05 
-    ## elapsed = 0.02   Round = 22  w1 = 0.0000 w2 = 0.0000 w3 = 1.0000 Value = 16.2381 
+    ## elapsed = 0.00   Round = 22  w1 = 0.0000 w2 = 0.0000 w3 = 1.0000 Value = 16.2381 
     ## elapsed = 0.00   Round = 23  w1 = 0.7114 w2 = 0.0000 w3 = 0.2841 Value = -2.088616e+04 
     ## elapsed = 0.00   Round = 24  w1 = 0.0000 w2 = 0.9980 w3 = 0.0000 Value = -4032.3122 
     ## elapsed = 0.00   Round = 25  w1 = 0.7790 w2 = 0.1572 w3 = 0.0581 Value = -3.316038e+04 

@@ -61,8 +61,8 @@ Let's run the algorithm `bayesian_optimization()` that we implemented. The param
 * `acq`: choice of acquisition function (Expected Improvement by default)
 
 ```{r}
-bayes_finance <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
-                                          init_grid_dt=search_grid, init_points=10)
+(bayes_finance <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
+                                          init_grid_dt=search_grid, init_points=10))
 ```
 
 Result of the function consists of a list with 2 components:
