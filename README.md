@@ -504,6 +504,48 @@ Based on normalized Bayes, here is how your asset should be distributed.
     ## 1  ULTA Ulta Salon Cosmetics & Fragrance Inc 81.48%
     ## 2   NFX              Newfield Exploration Co 14.95%
     ## 3  ORLY                  O'Reilly Automotive  3.58%
+    
+#### Pushing the limit
+
+Suppose we don’t want any data points that violates the constraint.
+Having data points that violate the constraint allows us to run more
+iterations of Bayesian Optimization but also makes it more tolerant to
+slight variations of the fitness value, therefore preventing us from
+finding the absolute optimum value.
+
+``` r
+search_grid <- normalize(search_grid)
+bayes_finance_allnorm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
+                                        init_grid_dt=search_grid, init_points=0, n_iter=1)
+```
+
+    ## $par
+    ##        w1        w2        w3 
+    ## 0.1336573 0.1222349 0.7441082 
+    ## 
+    ## $value
+    ## [1] 20.13223
+
+The solution has a Sharpe Ratio of 20.1322 which is even higher than the
+previous one! However, this only works after setting `n_iter` to only 1
+iteration, making it a much less stable problem to solve.
+
+Based on the all-normalized Bayes, here is how your asset should be
+distributed.
+
+``` r
+(bayes_allnorm_result <- data.frame(stock = unique(nyse$symbol),
+                                 weight = bayes_finance_allnorm$par) %>%
+                  arrange(desc(weight)) %>%
+                  mutate(weight = percent(weight, accuracy = 0.01)) %>%
+                  left_join(securities, by = "stock") %>%
+                  select(stock, Security, everything()))
+```
+
+    ##   stock                             Security weight
+    ## 1  ULTA Ulta Salon Cosmetics & Fragrance Inc 74.41%
+    ## 2   NFX              Newfield Exploration Co 13.37%
+    ## 3  ORLY                  O'Reilly Automotive 12.22%
 
 ### References
 

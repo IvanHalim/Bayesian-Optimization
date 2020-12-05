@@ -40,24 +40,22 @@ head(search_grid)
 Let’s run the algorithm `bayesian_optimization()` that we implemented.
 The parameters include:
 
-  - `FUN`: the fitness function
-  - `lower`: the lower bounds of each variables
-  - `upper`: the upper bounds of each variables
-  - `init_grid_dt`: user specified points to sample the target function
-  - `init_points`: Number of randomly chosen points to sample the target
+-   `FUN`: the fitness function
+-   `lower`: the lower bounds of each variables
+-   `upper`: the upper bounds of each variables
+-   `init_grid_dt`: user specified points to sample the target function
+-   `init_points`: Number of randomly chosen points to sample the target
     function before Bayesian Optimization fitting the Gaussian Process
-  - `n_iter`: number of repeated Bayesian Optimization
-  - `xi`: tunable parameter
+-   `n_iter`: number of repeated Bayesian Optimization
+-   `xi`: tunable parameter
     ![equation](https://latex.codecogs.com/gif.latex?%5Cxi) of Expected
     Improvement, to balance exploitation against exploration, increasing
     `xi` will make the optimized hyper parameters more spread out across
     the whole range
-  - `noise`: represents the amount of noise in the training data
-  - `max`: specifies whether we’re maximizing or minimizing a function
-  - `acq`: choice of acquisition function (Expected Improvement by
+-   `noise`: represents the amount of noise in the training data
+-   `max`: specifies whether we’re maximizing or minimizing a function
+-   `acq`: choice of acquisition function (Expected Improvement by
     default)
-
-<!-- end list -->
 
 ``` r
 (bayes_finance <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
@@ -73,8 +71,8 @@ The parameters include:
 
 Result of the function consists of a list with 2 components:
 
-  - par: a vector of the best hyperparameter set found
-  - value: the value of metrics achieved by the best hyperparameter set
+-   par: a vector of the best hyperparameter set found
+-   value: the value of metrics achieved by the best hyperparameter set
 
 So, what is the optimum Sharpe Ratio from Bayesian optimization?
 
@@ -162,7 +160,7 @@ rbayes_finance <- BayesianOptimization(FUN = fitness, bounds = search_bound,
                      n_iter = 10, acq = "ei")
 ```
 
-    ## elapsed = 0.00   Round = 1   w1 = 0.2876 w2 = 0.8895 w3 = 0.1428 Value = -1.023468e+08 
+    ## elapsed = 0.03   Round = 1   w1 = 0.2876 w2 = 0.8895 w3 = 0.1428 Value = -1.023468e+08 
     ## elapsed = 0.00   Round = 2   w1 = 0.7883 w2 = 0.6928 w3 = 0.4145 Value = -8.021977e+08 
     ## elapsed = 0.00   Round = 3   w1 = 0.4090 w2 = 0.6405 w3 = 0.4137 Value = -2.145617e+08 
     ## elapsed = 0.00   Round = 4   w1 = 0.8830 w2 = 0.9943 w3 = 0.3688 Value = -1.552847e+09 
@@ -171,7 +169,7 @@ rbayes_finance <- BayesianOptimization(FUN = fitness, bounds = search_bound,
     ## elapsed = 0.00   Round = 7   w1 = 0.5281 w2 = 0.5441 w3 = 0.2330 Value = -9.315046e+07 
     ## elapsed = 0.00   Round = 8   w1 = 0.8924 w2 = 0.5941 w3 = 0.4660 Value = -9.073010e+08 
     ## elapsed = 0.00   Round = 9   w1 = 0.5514 w2 = 0.2892 w3 = 0.2660 Value = -1.135660e+07 
-    ## elapsed = 0.00   Round = 10  w1 = 0.4566 w2 = 0.1471 w3 = 0.8578 Value = -2.130340e+08 
+    ## elapsed = 0.01   Round = 10  w1 = 0.4566 w2 = 0.1471 w3 = 0.8578 Value = -2.130340e+08 
     ## elapsed = 0.00   Round = 11  w1 = 0.9568 w2 = 0.9630 w3 = 0.0458 Value = -9.325547e+08 
     ## elapsed = 0.00   Round = 12  w1 = 0.4533 w2 = 0.9023 w3 = 0.4422 Value = -6.365379e+08 
     ## elapsed = 0.00   Round = 13  w1 = 0.6776 w2 = 0.6907 w3 = 0.7989 Value = -1.362358e+09 
@@ -346,7 +344,7 @@ search_grid[1:15,] <- normalize(search_grid[1:15,])
 
 The solution has a Sharpe Ratio of 19.6971. We achieve a higher
 performance than both `rBayesianOptimization` and Particle Swarm
-Optimization\!
+Optimization!
 
 Based on normalized Bayes, here is how your asset should be distributed.
 
@@ -364,9 +362,52 @@ Based on normalized Bayes, here is how your asset should be distributed.
     ## 2   NFX              Newfield Exploration Co 14.95%
     ## 3  ORLY                  O'Reilly Automotive  3.58%
 
+## Pushing the limit
+
+Suppose we don’t want any data points that violates the constraint.
+Having data points that violate the constraint allows us to run more
+iterations of Bayesian Optimization but also makes it more tolerant to
+slight variations of the fitness value, therefore preventing us from
+finding the absolute optimum value.
+
+``` r
+search_grid <- normalize(search_grid)
+(bayes_finance_allnorm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
+                                        init_grid_dt=search_grid, init_points=0, n_iter=1))
+```
+
+    ## $par
+    ##        w1        w2        w3 
+    ## 0.1336573 0.1222349 0.7441082 
+    ## 
+    ## $value
+    ## [1] 20.13223
+
+The solution has a Sharpe Ratio of 20.1322 which is even higher than the
+previous one! However, this only works after setting `n_iter` to only 1
+iteration, making it a much less stable problem to solve.
+
+Based on the all-normalized Bayes, here is how your asset should be
+distributed.
+
+``` r
+(bayes_allnorm_result <- data.frame(stock = unique(nyse$symbol),
+                                 weight = bayes_finance_allnorm$par) %>%
+                  arrange(desc(weight)) %>%
+                  mutate(weight = percent(weight, accuracy = 0.01)) %>%
+                  left_join(securities, by = "stock") %>%
+                  select(stock, Security, everything()))
+```
+
+    ##   stock                             Security weight
+    ## 1  ULTA Ulta Salon Cosmetics & Fragrance Inc 74.41%
+    ## 2   NFX              Newfield Exploration Co 13.37%
+    ## 3  ORLY                  O'Reilly Automotive 12.22%
+
 ``` r
 write_csv(bayes_result, here("results", "bayes_result.csv"))
 write_csv(rbayes_result, here("results", "rbayes_result.csv"))
 write_csv(pso_result, here("results", "pso_result.csv"))
 write_csv(bayes_norm_result, here("results", "bayes_norm_result.csv"))
+write_csv(bayes_allnorm_result, here("results", "bayes_allnorm_result.csv"))
 ```

@@ -246,9 +246,33 @@ Based on normalized Bayes, here is how your asset should be distributed.
                   select(stock, Security, everything()))
 ```
 
+## Pushing the limit
+
+Suppose we don't want any data points that violates the constraint. Having data points that violate the constraint allows us to run more iterations of Bayesian Optimization but also makes it more tolerant to slight variations of the fitness value, therefore preventing us from finding the absolute optimum value.
+
+```{r}
+search_grid <- normalize(search_grid)
+(bayes_finance_allnorm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
+                                        init_grid_dt=search_grid, init_points=0, n_iter=1))
+```
+
+The solution has a Sharpe Ratio of `r round(bayes_finance_allnorm$value, 4)` which is even higher than the previous one! However, this only works after setting `n_iter` to only 1 iteration, making it a much less stable problem to solve.
+
+Based on the all-normalized Bayes, here is how your asset should be distributed.
+
+```{r}
+(bayes_allnorm_result <- data.frame(stock = unique(nyse$symbol),
+                                 weight = bayes_finance_allnorm$par) %>%
+                  arrange(desc(weight)) %>%
+                  mutate(weight = percent(weight, accuracy = 0.01)) %>%
+                  left_join(securities, by = "stock") %>%
+                  select(stock, Security, everything()))
+```
+
 ```{r}
 write_csv(bayes_result, here("results", "bayes_result.csv"))
 write_csv(rbayes_result, here("results", "rbayes_result.csv"))
 write_csv(pso_result, here("results", "pso_result.csv"))
 write_csv(bayes_norm_result, here("results", "bayes_norm_result.csv"))
+write_csv(bayes_allnorm_result, here("results", "bayes_allnorm_result.csv"))
 ```
