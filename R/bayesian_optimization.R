@@ -143,9 +143,12 @@ bayesian_optimization <- function(FUN, lower, upper, init_grid_dt=NULL, init_poi
 #' @export
 #'
 #' @examples
-plot_acquisition <- function(X, EI, X_next) {
-  ggplot(data=data.frame(x = X, y = EI), aes(x, y)) +
-    geom_line(color = "red", size = 0.7) +
-    geom_vline(xintercept = X_next, linetype = "dashed") +
-    theme_minimal()
+plot_acquisition <- function(X, EI, X_next=NULL) {
+  g <- ggplot(data=data.frame(x = X, y = EI), aes(x, y))
+  g <- g + geom_line(color = "red", size = 0.7)
+  if (!is.null(X_next)) {
+    g <- g + geom_vline(xintercept = X_next, linetype = "dashed")
+  }
+  g <- g + theme_minimal()
+  g
 }

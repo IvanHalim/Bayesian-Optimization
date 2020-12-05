@@ -22,7 +22,7 @@ chemical search space then it is important to minimize the number of
 samples drawn from the black box function
 ![equation](https://latex.codecogs.com/gif.latex?f).
 
-## Project Organization
+### Project Organization
 
   - The `analysis` folder contains Rmarkdown files (along with knitted
     versions for easy viewing) with the code used to run simulations and
@@ -45,7 +45,7 @@ samples drawn from the black box function
     the `R` folder. Documentation for each function can be rendered
     using the standard R syntax (e.g. `?function`).
 
-## Gaussian Process
+### Gaussian Process
 
 Gaussian Process is a probabilistic model to approximate based on a
 given set of data points. Gaussian Process models a function as a set of
@@ -109,7 +109,46 @@ plot_gp(mu_s, cov_s, X, X_train, Y_train, samples)
 
 ![](README_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
-## Acquisition Function
+This implementation can also be used for higher input data dimensions.
+Here, a GP is used to fit noisy samples from a sine wave originating at
+0 and expanding in the x-y plane. The following plots show the noisy
+samples and the posterior predictive mean before and after kernel
+parameter optimization.
+
+``` r
+noise_2D <- 0.1
+gpr_2D <- gpr.init(sigma_y = noise_2D)
+
+rx <- seq(-5, 5, 0.3)
+
+X_2D <- as.matrix(
+    data.frame(
+        rep(rx, times = length(rx)),
+        rep(rx, each = length(rx))
+    )
+)
+
+X_2D_train <- as.matrix(
+    data.frame(
+        runif(n = 100, min = -4, max = 4),
+        runif(n = 100, min = -4, max = 4)
+    )
+)
+
+Y_2D_train <- sin(0.5 * sqrt(X_2D_train[,1]^2 + X_2D_train[,2]^2)) +
+              noise_2D * rnorm(len(X_2D_train))
+
+gpr_2D <- gpr.fit(X_2D_train, Y_2D_train, gpr_2D)
+result <- gpr.predict(X_2D, gpr_2D)
+mu_s <- array(result$mu_s, c(length(rx), length(rx)))
+
+persp3D(x=rx, y=rx, z=mu_s,
+        theta=30, phi=20, alpha=0.5)
+```
+
+![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
+### Acquisition Function
 
 Acquisition function is employed to choose which point of
 ![equation](https://latex.codecogs.com/gif.latex?x) that we will take
@@ -132,7 +171,12 @@ value is calculated using expected improvement method. Point with the
 highest value of the acquisition function will be sampled at the next
 round/iteration.
 
-<img src="figures/acquisition_function.png">
+``` r
+EI <- expected_improvement(X, X_train, Y_train, gpr)
+plot_acquisition(X, EI)
+```
+
+![](README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 There are several choice of acquisition function, such as expected
 improvement, upper confidence bound, entropy search, etc. Here we will
@@ -183,3 +227,64 @@ proposed sampling point for the next iteration which corresponds to the
 maximum of the acquisition function.
 
 <img src="figures/bayes_opt_illustration.png">
+
+## Portfolio Optimization
+
+Portfolio optimization problem is concerned with managing the portfolio
+of assets that minimizes the risk objectives subjected to the constraint
+for guaranteeing a given level of returns. One of the fundamental
+principles of financial investment is diversification where investors
+diversify their investments into different types of assets. Portfolio
+diversification minimizes investors exposure to risks, and maximizes
+returns on portfolios.
+
+The fitness function is the adjusted Sharpe Ratio for restricted
+portofolio, which combines the information from mean and variance of an
+asset and functioned as a risk-adjusted measure of mean return, which is
+often used to evaluate the performance of a portfolio.
+
+The Sharpe ratio can help to explain whether a portfolio’s excess
+returns are due to smart investment decisions or a result of too much
+risk. Although one portfolio or fund can enjoy higher returns than its
+peers, it is only a good investment if those higher returns do not come
+with an excess of additional risk.
+
+The greater a portfolio’s Sharpe ratio, the better its risk-adjusted
+performance. If the analysis results in a negative Sharpe ratio, it
+either means the risk-free rate is greater than the portfolio’s return,
+or the portfolio’s return is expected to be negative.
+
+The fitness function is shown
+below:
+
+![equation](https://latex.codecogs.com/gif.latex?%5Cmax%20f%28x%29%20%3D%20%5Cfrac%7B%5Csum%5Climits_%7Bi%3D1%7D%5EN%20W_i%20%5Cast%20r_i%20-%20R_f%7D%7B%5Csum%5Climits_%7Bi%3D1%7D%5EN%20%5Csum%5Climits_%7Bj%3D1%7D%5EN%20W_i%20%5Cast%20W_j%20%5Cast%20%5Csigma_%7Bij%7D%7D)
+
+**Subject
+    To**
+
+  - ![equation](https://latex.codecogs.com/gif.latex?%5Csum%5Climits_%7Bi%3D1%7D%5EN%20W_i%20%3D%201)
+
+  - ![equation](https://latex.codecogs.com/gif.latex?0%20%5Cleq%20W_i%20%5Cleq%201)
+
+  - ![equation](https://latex.codecogs.com/gif.latex?i%20%3D%201%2C2%2C...%2CN)
+
+Where,
+
+  - ![equation](https://latex.codecogs.com/gif.latex?N): Number of
+    different assets
+  - ![equation](https://latex.codecogs.com/gif.latex?W_i): Weight of
+    each stock in the portfolio
+  - ![equation](https://latex.codecogs.com/gif.latex?r_i): Return of
+    stock ![equation](https://latex.codecogs.com/gif.latex?i)
+  - ![equation](https://latex.codecogs.com/gif.latex?R_f): The test
+    available rate of return of a risk-free security (i.e. the interest
+    rate on a three month U.S. Treasury bill)
+  - ![equation](https://latex.codecogs.com/gif.latex?%5Csigma_%7Bij%7D):
+    Covariance between returns of assets
+    ![equation](https://latex.codecogs.com/gif.latex?i) and
+    ![equation](https://latex.codecogs.com/gif.latex?j)
+
+Adjusting the portfolio weights
+![equation](https://latex.codecogs.com/gif.latex?w_i), we can maximize
+the portfolio Sharpe Ratio in effect balancing the trade-off between
+maximizing the expected return and at the same time minimizing the risk.
