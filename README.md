@@ -315,7 +315,7 @@ The parameters include:
   - `init_points`: Number of randomly chosen points to sample the target
     function before Bayesian Optimization fitting the Gaussian Process
   - `n_iter`: number of repeated Bayesian Optimization
-  - `xi`: tunable parameter \(\xi\) of Expected Improvement, to balance
+  - `xi`: tunable parameter ![equation](https://latex.codecogs.com/gif.latex?%5Cxi) of Expected Improvement, to balance
     exploitation against exploration, increasing `xi` will make the
     optimized hyper parameters more spread out across the whole range
   - `noise`: represents the amount of noise in the training data
@@ -496,7 +496,7 @@ bayes_finance_norm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper
     ## [1] 20.13238
 
 The solution has a Sharpe Ratio of 20.1324. We achieve a higher
-performance than `rBayesianOptimization` or Particle Swarm Optimization,
+performance than both `rBayesianOptimization` and Particle Swarm Optimization,
 and in just one iteration\!
 
 Based on normalized Bayes, here is how your asset should be distributed.

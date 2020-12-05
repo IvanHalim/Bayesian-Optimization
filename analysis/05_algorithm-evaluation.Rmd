@@ -233,7 +233,7 @@ normalized_search_grid <- normalize(search_grid)
 (bayes_finance_norm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
                                         init_grid_dt=normalized_search_grid, init_points=0, n_iter=1))
 ```
-The solution has a Sharpe Ratio of `r round(bayes_finance_norm$value, 4)`. We achieve a higher performance than `rBayesianOptimization` or Particle Swarm Optimization, and in just one iteration!
+The solution has a Sharpe Ratio of `r round(bayes_finance_norm$value, 4)`. We achieve a higher performance than both `rBayesianOptimization` and Particle Swarm Optimization, and in just one iteration!
 
 Based on normalized Bayes, here is how your asset should be distributed.
 

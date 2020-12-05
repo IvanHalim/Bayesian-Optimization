@@ -338,8 +338,8 @@ normalized_search_grid <- normalize(search_grid)
     ## [1] 20.13238
 
 The solution has a Sharpe Ratio of 20.1324. We achieve a higher
-performance than `rBayesianOptimization` or Particle Swarm Optimization,
-and in just one iteration\!
+performance than both `rBayesianOptimization` and Particle Swarm
+Optimization, and in just one iteration\!
 
 Based on normalized Bayes, here is how your asset should be distributed.
 
