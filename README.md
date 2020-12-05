@@ -465,3 +465,13 @@ evalutions (20 from samples, 10 from iterations) with Bayesian
 Optimization, compared to PSO, which run more than 1000 evaluations. The
 trade-off is Bayesian Optimization ran slower than PSO, since the
 function evaluation is cheap.
+
+### References
+
+[1] Martin Krasser. [Gaussian Processes](https://krasserm.github.io/2018/03/19/gaussian-processes/)<br />
+[2] Martin Krasser. [Bayesian Optimization](http://krasserm.github.io/2018/03/21/bayesian-optimization/)<br />
+[3] Arga Adyatama. [Introduction to Bayesian Optimization](https://rpubs.com/Argaadya/bayesian-optimization)<br />
+[4] Mikhail Popov. [A tutorial on Bayesian optimization in R](https://bearloga.github.io/bayesopt-tutorial-r/)<br />
+[5] Arga Adyatama. [Introduction to Particle Swarm Optimization](https://rpubs.com/Argaadya/intro-PSO)<br />
+[6] Matthew Hoffman, Eric Brochu & Nando de Freitas (2011). [Portfolio Allocation for Bayesian Optimization](https://www.cs.ubc.ca/~nando/papers/uaiBayesOpt.pdf)<br />
+[7] Zhu, H., Wang, Y., Wang, K., & Chen, Y. (2011). [Particle Swarm Optimization (PSO) for the constrained portfolio optimization problem](https://www.sciencedirect.com/science/article/abs/pii/S0957417411002818?via%3Dihub)
