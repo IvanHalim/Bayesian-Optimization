@@ -507,7 +507,7 @@ Based on normalized Bayes, here is how your asset should be distributed.
 #### Pushing the limit
 
 Our implementation uses QR decomposition to find the least squares
-solution to avoid having to compute the inverse of a close to singular
+approximation to avoid having to compute the inverse of a close to singular
 matrix. This means that our implementation is numerically more stable but it is also
 tolerant to slight fluctuations in the fitness value. Suppose we want to
 make it stricter by using the naive implementation, but at the cost of

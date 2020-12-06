@@ -247,10 +247,9 @@ Based on normalized Bayes, here is how your asset should be distributed.
 
 ## Pushing the limit
 
-Our implementation uses QR decomposition to find the least squares solution to avoid having to compute the inverse of a close to singular matrix. This means that our implementation is numerically more stable but it is also tolerant to slight fluctuations in the fitness value. Suppose we want to make it stricter by using the naive implementation, but at the cost of being less stable.
+Our implementation uses QR decomposition to find the least squares approximation to avoid having to compute the inverse of a close to singular matrix. This means that our implementation is numerically more stable but it is also tolerant to slight fluctuations in the fitness value. Suppose we want to make it stricter by using the naive implementation, but at the cost of being less stable.
 
 ```{r}
-search_grid <- normalize(search_grid)
 (bayes_finance_naive <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
                                         init_grid_dt=search_grid, n_iter=1, naive=TRUE))
 ```
