@@ -203,11 +203,11 @@ bayesian_optimization <- function(FUN, lower, upper, init_grid_dt=NULL, init_poi
 #' EI <- expected_improvement(X, gpr)
 #' plot_acquisition(X, EI)
 plot_acquisition <- function(X, acq, X_next=NULL) {
-  g <- ggplot(data=data.frame(x = X, y = acq), aes(x, y))
-  g <- g + geom_line(color = "red", size = 0.7)
+  g <- ggplot2::ggplot(data=data.frame(x = X, y = acq), aes(x, y))
+  g <- g + ggplot2::geom_line(color = "red", size = 0.7)
   if (!is.null(X_next)) {
-    g <- g + geom_vline(xintercept = X_next, linetype = "dashed")
+    g <- g + ggplot2::geom_vline(xintercept = X_next, linetype = "dashed")
   }
-  g <- g + theme_minimal()
+  g <- g + ggplot2::theme_minimal()
   g
 }
