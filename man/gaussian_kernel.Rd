@@ -11,9 +11,9 @@ gaussian_kernel(x, y, l = 1, sigma_f = 1)
 
 \item{y}{a numeric vector or a two-dimensional array of length \code{n}. Must be the same type of object as \code{x}.}
 
-\item{l}{the length parameter that controls the smoothness of the function}
+\item{l}{the length parameter that controls the smoothness of the function.}
 
-\item{sigma_f}{the scale parameter that controls the vertical variation.}
+\item{sigma_f}{the scale parameter that controls the vertical variation of the function.}
 }
 \value{
 an \code{m * n} similarity matrix

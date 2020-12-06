@@ -1,4 +1,4 @@
-#' A generalized length function
+#' Generalized length function
 #' 
 #' Returns the length of `x` if it's a vector or the number of rows if `x` is an array.
 #' 
@@ -54,8 +54,8 @@ rappend <- function(X, Y) {
 #'
 #' @param x a numeric vector or a two-dimensional array of length `m`.
 #' @param y a numeric vector or a two-dimensional array of length `n`. Must be the same type of object as `x`.
-#' @param l the length parameter that controls the smoothness of the function
-#' @param sigma_f the scale parameter that controls the vertical variation.
+#' @param l the length parameter that controls the smoothness of the function.
+#' @param sigma_f the scale parameter that controls the vertical variation of the function.
 #'
 #' @return an `m * n` similarity matrix
 #' @export
@@ -159,6 +159,10 @@ plot_gp <- function(mu, cov, X, X_train = NULL, Y_train = NULL, samples = NULL) 
 nll_fn <- function(X_train, Y_train, noise, kernel, naive=FALSE) {
   
   nll_naive <- function(theta) {
+    # Naive implementation of Eq. (11). Works well for the examples 
+    # in this article but is numerically less stable compared to 
+    # the implementation in nll_stable below
+    
     K <- kernel(X_train, X_train, l=theta[1], sigma_f=theta[2]) +
       noise^2 * diag(len(X_train))
     # Compute determinant via Cholesky decomposition
@@ -169,8 +173,12 @@ nll_fn <- function(X_train, Y_train, noise, kernel, naive=FALSE) {
   }
   
   nll_stable <- function(theta) {
-    # Compute the least squares using QR decomposition
+    # Numerically more stable implementation of Eq. (11) as described
+    # in http://www.gaussianprocess.org/gpml/chapters/RW2.pdf, Section
+    # 2.2, Algorithm 2.1
+    
     ls <- function(X, Y) {
+      # Compute least squares using QR decomposition
       QR <- qr(X)
       Q <- qr.Q(QR)
       R <- qr.R(QR)
@@ -192,17 +200,21 @@ nll_fn <- function(X_train, Y_train, noise, kernel, naive=FALSE) {
   }
 }
 
-#' Title
+#' Initialize Gaussian Process
+#' 
+#' Create a Gaussian Process object to store important parameters
+#' for posterior prediction
 #'
-#' @param l 
-#' @param sigma_f 
-#' @param sigma_y 
-#' @param kern 
+#' @param l the length parameter that controls the smoothness of the function.
+#' @param sigma_f the scale parameter that controls the vertical variation of the function.
+#' @param sigma_y the noise parameter, represents the amount of noise in the training data.
+#' @param kern the kernel function that we're going to be using.
 #'
-#' @return
+#' @return a list with all the parameter values as its components
 #' @export
 #'
 #' @examples
+#' gpr.init(l=1.0, sigma_f=1.0, sigma_y=0, kern=gaussian_kernel)
 gpr.init <- function(l=1.0, sigma_f=1.0, sigma_y=0, kern=gaussian_kernel) {
   list("X_train" = NULL,
        "Y_train" = NULL,
@@ -213,20 +225,31 @@ gpr.init <- function(l=1.0, sigma_f=1.0, sigma_y=0, kern=gaussian_kernel) {
        )
 }
 
-#' Title
+#' Fitting Gaussian Process
+#' 
+#' Trains the Gaussian Process model based on training data. It then
+#' finds the optimum values for parameters `l` and `sigma_f`
 #'
-#' @param X_train 
-#' @param Y_train 
-#' @param gpr 
-#' @param lower 
-#' @param upper 
-#' @param n_restarts 
-#' @param naive 
+#' @param X_train training location `m * d`
+#' @param Y_train training targets `m * 1`
+#' @param gpr a gaussian process object
+#' @param lower lower bound of `l` and `sigma_f`
+#' @param upper upper bound of `l` and `sigma_f`
+#' @param n_restarts number of iterations to find the optimum `l` and `sigma_f`
+#' @param naive if TRUE use a naive implementation, if FALSE use a numerically more stable implementation.
 #'
 #' @return
+#' an updated gaussian process object which contains `X_train`, `Y_train`, `l` and `sigma_f`
 #' @export
 #'
 #' @examples
+#' noise <- 0.4
+#' gpr <- gpr.init(sigma_y = noise)
+#' 
+#' # Noisy training data
+#' X_train <- seq(-3, 3, 1)
+#' Y_train <- sin(X_train) + noise * rnorm(n = length(X_train))
+#' gpr <- gpr.fit(X_train, Y_train, gpr)
 gpr.fit <- function(X_train, Y_train, gpr, lower=c(1e-5, 1e-5),
                     upper=c(2, 2), n_restarts=25, naive=FALSE) {
   

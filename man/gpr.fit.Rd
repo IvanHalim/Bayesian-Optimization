@@ -2,7 +2,7 @@
 % Please edit documentation in R/gaussian_process.R
 \name{gpr.fit}
 \alias{gpr.fit}
-\title{Title}
+\title{Fitting Gaussian Process}
 \usage{
 gpr.fit(
   X_train,
@@ -15,23 +15,33 @@ gpr.fit(
 )
 }
 \arguments{
-\item{X_train}{}
+\item{X_train}{training location \code{m * d}}
 
-\item{Y_train}{}
+\item{Y_train}{training targets \code{m * 1}}
 
-\item{gpr}{}
+\item{gpr}{a gaussian process object}
 
-\item{lower}{}
+\item{lower}{lower bound of \code{l} and \code{sigma_f}}
 
-\item{upper}{}
+\item{upper}{upper bound of \code{l} and \code{sigma_f}}
 
-\item{n_restarts}{}
+\item{n_restarts}{number of iterations to find the optimum \code{l} and \code{sigma_f}}
 
-\item{naive}{}
+\item{naive}{if TRUE use a naive implementation, if FALSE use a numerically more stable implementation.}
 }
 \value{
-
+an updated gaussian process object which contains \code{X_train}, \code{Y_train}, \code{l} and \code{sigma_f}
 }
 \description{
-Title
+Trains the Gaussian Process model based on training data. It then
+finds the optimum values for parameters \code{l} and \code{sigma_f}
+}
+\examples{
+noise <- 0.4
+gpr <- gpr.init(sigma_y = noise)
+
+# Noisy training data
+X_train <- seq(-3, 3, 1)
+Y_train <- sin(X_train) + noise * rnorm(n = length(X_train))
+gpr <- gpr.fit(X_train, Y_train, gpr)
 }

@@ -2,26 +2,36 @@
 % Please edit documentation in R/bayesian_optimization.R
 \name{expected_improvement}
 \alias{expected_improvement}
-\title{Title}
+\title{Expected Improvement Acquisition Function}
 \usage{
-expected_improvement(X, X_sample, Y_sample, gpr, xi = 0.01, max = TRUE)
+expected_improvement(X, gpr, xi = 0.01, max = TRUE)
 }
 \arguments{
-\item{X}{}
+\item{X}{points at which EI shall be computed \code{m * d}.}
 
-\item{X_sample}{}
+\item{gpr}{a fitted gaussian process object containing \code{X_train} and \code{Y_train}.}
 
-\item{Y_sample}{}
+\item{xi}{exploitation-exploration trade-off parameter}
 
-\item{gpr}{}
-
-\item{xi}{}
-
-\item{max}{}
+\item{max}{if TRUE we want to maximize the fitness function, otherwise minimize.}
 }
 \value{
-
+A numeric vector containing the expected improvements at points \code{X}
 }
 \description{
-Title
+Computes the EI at points X based on existing samples X_sample
+and Y_sample using a Gaussian process surrogate model
+}
+\examples{
+noise <- 0.4
+gpr <- gpr.init(sigma_y = noise)
+
+# Noisy training data
+X_train <- seq(-3, 3, 1)
+Y_train <- sin(X_train) + noise * rnorm(n = length(X_train))
+gpr <- gpr.fit(X_train, Y_train, gpr)
+
+# Finite number of points
+X <- seq(-5, 5, 0.2)
+EI <- expected_improvement(X, gpr)
 }

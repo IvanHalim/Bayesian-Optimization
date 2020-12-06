@@ -44,7 +44,7 @@ The parameters include:
 -   `lower`: the lower bounds of each variables
 -   `upper`: the upper bounds of each variables
 -   `init_grid_dt`: user specified points to sample the target function
--   `init_points`: Number of randomly chosen points to sample the target
+-   `init_points`: number of randomly chosen points to sample the target
     function before Bayesian Optimization fitting the Gaussian Process
 -   `n_iter`: number of repeated Bayesian Optimization
 -   `xi`: tunable parameter
@@ -56,6 +56,9 @@ The parameters include:
 -   `max`: specifies whether we’re maximizing or minimizing a function
 -   `acq`: choice of acquisition function (Expected Improvement by
     default)
+-   `naive`: choice between a naive implementation (direct inverse) vs a
+    numerically more stable implementation (least squares approximation
+    using QR decomposition)
 
 ``` r
 (bayes_finance <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
@@ -361,11 +364,11 @@ Based on normalized Bayes, here is how your asset should be distributed.
 ## Pushing the limit
 
 Our implementation uses QR decomposition to find the least squares
-approximation to avoid having to compute the inverse of a close to singular
-matrix. This means that our implementation is numerically more stable but it is also
-tolerant to slight fluctuations in the fitness value. Suppose we want to
-make it stricter by using the naive implementation, but at the cost of
-being less stable.
+approximation to avoid having to compute the inverse of a close to
+singular matrix. This means that our implementation is numerically more
+stable but it is also tolerant to slight fluctuations in the fitness
+value. Suppose we want to make it stricter by using the naive
+implementation, but at the cost of being less stable.
 
 ``` r
 (bayes_finance_naive <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
@@ -374,16 +377,16 @@ being less stable.
 
     ## $par
     ##        w1        w2        w3 
-    ## 0.1336573 0.1222349 0.7441082 
+    ## 0.1336572 0.1222353 0.7441077 
     ## 
     ## $value
-    ## [1] 20.13223
+    ## [1] 20.13234
 
-The solution has a Sharpe Ratio of 20.1322 which is even higher than the
+The solution has a Sharpe Ratio of 20.1323 which is even higher than the
 previous one! However, keep in mind that this only works after setting
 `n_iter` to just 1 iteration.
 
-Based on the naive implementation, here is how your asset should be
+Based on the all-normalized Bayes, here is how your asset should be
 distributed.
 
 ``` r

@@ -2,22 +2,26 @@
 % Please edit documentation in R/gaussian_process.R
 \name{gpr.init}
 \alias{gpr.init}
-\title{Title}
+\title{Initialize Gaussian Process}
 \usage{
 gpr.init(l = 1, sigma_f = 1, sigma_y = 0, kern = gaussian_kernel)
 }
 \arguments{
-\item{l}{}
+\item{l}{the length parameter that controls the smoothness of the function.}
 
-\item{sigma_f}{}
+\item{sigma_f}{the scale parameter that controls the vertical variation of the function.}
 
-\item{sigma_y}{}
+\item{sigma_y}{the noise parameter, represents the amount of noise in the training data.}
 
-\item{kern}{}
+\item{kern}{the kernel function that we're going to be using.}
 }
 \value{
-
+a list with all the parameter values as its components
 }
 \description{
-Title
+Create a Gaussian Process object to store important parameters
+for posterior prediction
+}
+\examples{
+gpr.init(l=1.0, sigma_f=1.0, sigma_y=0, kern=gaussian_kernel)
 }

@@ -2,20 +2,34 @@
 % Please edit documentation in R/bayesian_optimization.R
 \name{plot_acquisition}
 \alias{plot_acquisition}
-\title{Title}
+\title{Plotting Acquisition Function}
 \usage{
-plot_acquisition(X, EI, X_next = NULL)
+plot_acquisition(X, acq, X_next = NULL)
 }
 \arguments{
-\item{X}{}
+\item{X}{the \code{x} coordinates of points in the plot.}
 
-\item{EI}{}
+\item{acq}{the \code{y} coordinates of points in the plot, which are the acquisition values of \code{x}.}
 
-\item{X_next}{}
+\item{X_next}{the proposed next location to be sampled from.}
 }
 \value{
-
+a ggplot object
 }
 \description{
-Title
+A utility function to plot the acquisition function of a gaussian process
+}
+\examples{
+noise <- 0.4
+gpr <- gpr.init(sigma_y = noise)
+
+# Noisy training data
+X_train <- seq(-3, 3, 1)
+Y_train <- sin(X_train) + noise * rnorm(n = length(X_train))
+gpr <- gpr.fit(X_train, Y_train, gpr)
+
+# Finite number of points
+X <- seq(-5, 5, 0.2)
+EI <- expected_improvement(X, gpr)
+plot_acquisition(X, EI)
 }

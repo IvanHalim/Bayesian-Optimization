@@ -2,7 +2,7 @@
 % Please edit documentation in R/bayesian_optimization.R
 \name{bayesian_optimization}
 \alias{bayesian_optimization}
-\title{Title}
+\title{Bayesian Optimization}
 \usage{
 bayesian_optimization(
   FUN,
@@ -19,31 +19,49 @@ bayesian_optimization(
 )
 }
 \arguments{
-\item{FUN}{}
+\item{FUN}{the fitness function.}
 
-\item{lower}{}
+\item{lower}{the lower bounds of each variables.}
 
-\item{upper}{}
+\item{upper}{the upper bounds of each variables.}
 
-\item{init_grid_dt}{}
+\item{init_grid_dt}{user specified points to sample the target function.}
 
-\item{init_points}{}
+\item{init_points}{number of randomly chosen points to sample the target function before Bayesian Optimization fitting the Gaussian Process.}
 
-\item{n_iter}{}
+\item{n_iter}{number of repeated Bayesian Optimization.}
 
-\item{xi}{}
+\item{xi}{exploitation-exploration trade-off parameter.}
 
-\item{noise}{}
+\item{noise}{represents the amount of noise in the training data.}
 
-\item{max}{}
+\item{max}{if TRUE we want to maximize the fitness function, otherwise minimize.}
 
-\item{acq}{}
+\item{acq}{choice of acquisition function (Expected Improvement by default).}
 
-\item{naive}{}
+\item{naive}{if TRUE use the naive a naive implementation of negative log-likelihood,
+otherwise use a numerically more stable implementation.}
 }
 \value{
-
+a list with components
+\itemize{
+\item \code{par} the best set of parameters found.
+\item \code{value} the value of \code{FUN} corresponding to \code{par}
+}
 }
 \description{
-Title
+Perform a Bayesian Optimization on a fitness function.
+}
+\examples{
+noise <- 0.2 
+f <- function(X, noise = noise) {
+  -sin(3*X) - X^2 + 0.7*X + noise * rnorm(length(X))
+}
+
+search_grid <- c(-0.9, 1.1)
+lower <- -1.0
+upper <- 2.0
+
+(result <- bayesian_optimization(FUN=f, lower=lower, upper=upper, init_grid_dt=search_grid,
+                                 noise=noise, naive=TRUE))
 }

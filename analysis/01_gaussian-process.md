@@ -428,14 +428,14 @@ nll_fn <- function(X_train, Y_train, noise, kernel) {
 ```
 
     ## $par
-    ## [1] 1.1624787 0.4252034
+    ## [1] 1.2360929 0.6647353
     ## 
     ## $value
-    ## [1] 4.930078
+    ## [1] 7.270252
     ## 
     ## $counts
     ## function gradient 
-    ##        9        9 
+    ##       10       10 
     ## 
     ## $convergence
     ## [1] 0

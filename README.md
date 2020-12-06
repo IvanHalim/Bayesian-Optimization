@@ -173,7 +173,7 @@ highest value of the acquisition function will be sampled at the next
 round/iteration.
 
 ``` r
-EI <- expected_improvement(X, X_train, Y_train, gpr)
+EI <- expected_improvement(X, gpr)
 plot_acquisition(X, EI)
 ```
 
@@ -312,7 +312,7 @@ The parameters include:
   - `lower`: the lower bounds of each variables
   - `upper`: the upper bounds of each variables
   - `init_grid_dt`: user specified points to sample the target function
-  - `init_points`: Number of randomly chosen points to sample the target
+  - `init_points`: number of randomly chosen points to sample the target
     function before Bayesian Optimization fitting the Gaussian Process
   - `n_iter`: number of repeated Bayesian Optimization
   - `xi`: tunable parameter ![equation](https://latex.codecogs.com/gif.latex?%5Cxi) of Expected Improvement, to balance
@@ -322,6 +322,7 @@ The parameters include:
   - `max`: specifies whether we’re maximizing or minimizing a function
   - `acq`: choice of acquisition function (Expected Improvement by
     default)
+  - `naive`: choice between a naive implementation (direct inverse) vs a numerically more stable implementation (least squares approximation using QR decomposition)
 
 <!-- end list -->
 

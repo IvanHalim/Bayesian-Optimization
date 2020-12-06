@@ -2,7 +2,7 @@
 % Please edit documentation in R/gaussian_process.R
 \name{len}
 \alias{len}
-\title{A generalized length function}
+\title{Generalized length function}
 \usage{
 len(x)
 }
