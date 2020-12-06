@@ -386,8 +386,7 @@ package.
 
 ``` r
 rbayes_finance <- BayesianOptimization(FUN = fitness, bounds = search_bound, 
-                     init_grid_dt = search_grid, init_points = 0, 
-                     n_iter = 10, acq = "ei")
+                     init_grid_dt = search_grid, n_iter = 10, acq = "ei")
 ```
 
     ## elapsed = 0.02   Round = 1   w1 = 0.2876 w2 = 0.8895 w3 = 0.1428 Value = -1.023468e+08 
@@ -485,7 +484,7 @@ add up to more than 1, therefore not violating the constraint. We're only going 
 ``` r
 search_grid[1:15,] <- normalize(search_grid[1:15,])
 bayes_finance_norm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
-                                        init_grid_dt=search_grid, init_points=0)
+                                        init_grid_dt=search_grid)
 ```
 
     ## $par
@@ -516,7 +515,7 @@ finding the absolute optimum value.
 ``` r
 search_grid <- normalize(search_grid)
 bayes_finance_allnorm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
-                                        init_grid_dt=search_grid, init_points=0, n_iter=1)
+                                        init_grid_dt=search_grid, n_iter=1)
 ```
 
     ## $par
@@ -532,15 +531,6 @@ iteration, making it a much less stable problem to solve.
 
 Based on the all-normalized Bayes, here is how your asset should be
 distributed.
-
-``` r
-(bayes_allnorm_result <- data.frame(stock = unique(nyse$symbol),
-                                 weight = bayes_finance_allnorm$par) %>%
-                  arrange(desc(weight)) %>%
-                  mutate(weight = percent(weight, accuracy = 0.01)) %>%
-                  left_join(securities, by = "stock") %>%
-                  select(stock, Security, everything()))
-```
 
     ##   stock                             Security weight
     ## 1  ULTA Ulta Salon Cosmetics & Fragrance Inc 74.41%

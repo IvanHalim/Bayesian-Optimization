@@ -94,7 +94,7 @@ propose_location <- function(acquisition, X_sample, Y_sample, gpr,
 #' @export
 #'
 #' @examples
-bayesian_optimization <- function(FUN, lower, upper, init_grid_dt=NULL, init_points=1,
+bayesian_optimization <- function(FUN, lower, upper, init_grid_dt=NULL, init_points=0,
                                   n_iter=10, xi=0.01, noise=0, max=TRUE, acq=expected_improvement) {
   
   X_train <- init_grid_dt

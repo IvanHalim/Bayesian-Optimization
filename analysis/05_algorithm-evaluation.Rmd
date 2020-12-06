@@ -131,8 +131,7 @@ search_grid_df <- data.frame(search_grid)
 
 set.seed(1)
 rbayes_finance <- BayesianOptimization(FUN = fitness, bounds = search_bound, 
-                     init_grid_dt = search_grid_df, init_points = 0, 
-                     n_iter = 10, acq = "ei")
+                     init_grid_dt = search_grid_df, n_iter = 10, acq = "ei")
 ```
 
 The solution has a Sharpe Ratio of `r round(rbayes_finance$Best_Value[1], 4)` with the following weight.
@@ -231,7 +230,7 @@ We could also normalize our search grid to ensure that the weights don't add up 
 ```{r}
 search_grid[1:15,] <- normalize(search_grid[1:15,])
 (bayes_finance_norm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
-                                        init_grid_dt=search_grid, init_points=0))
+                                        init_grid_dt=search_grid))
 ```
 The solution has a Sharpe Ratio of `r round(bayes_finance_norm$value, 4)`. We achieve a higher performance than both `rBayesianOptimization` and Particle Swarm Optimization!
 
@@ -253,7 +252,7 @@ Suppose we don't want any data points that violates the constraint. Having data 
 ```{r}
 search_grid <- normalize(search_grid)
 (bayes_finance_allnorm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
-                                        init_grid_dt=search_grid, init_points=0, n_iter=1))
+                                        init_grid_dt=search_grid, n_iter=1))
 ```
 
 The solution has a Sharpe Ratio of `r round(bayes_finance_allnorm$value, 4)` which is even higher than the previous one! However, this only works after setting `n_iter` to only 1 iteration, making it a much less stable problem to solve.

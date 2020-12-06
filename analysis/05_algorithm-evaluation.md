@@ -156,25 +156,24 @@ search_grid_df <- data.frame(search_grid)
 
 set.seed(1)
 rbayes_finance <- BayesianOptimization(FUN = fitness, bounds = search_bound, 
-                     init_grid_dt = search_grid_df, init_points = 0, 
-                     n_iter = 10, acq = "ei")
+                     init_grid_dt = search_grid_df, n_iter = 10, acq = "ei")
 ```
 
-    ## elapsed = 0.03   Round = 1   w1 = 0.2876 w2 = 0.8895 w3 = 0.1428 Value = -1.023468e+08 
+    ## elapsed = 0.07   Round = 1   w1 = 0.2876 w2 = 0.8895 w3 = 0.1428 Value = -1.023468e+08 
     ## elapsed = 0.00   Round = 2   w1 = 0.7883 w2 = 0.6928 w3 = 0.4145 Value = -8.021977e+08 
-    ## elapsed = 0.00   Round = 3   w1 = 0.4090 w2 = 0.6405 w3 = 0.4137 Value = -2.145617e+08 
+    ## elapsed = 0.01   Round = 3   w1 = 0.4090 w2 = 0.6405 w3 = 0.4137 Value = -2.145617e+08 
     ## elapsed = 0.00   Round = 4   w1 = 0.8830 w2 = 0.9943 w3 = 0.3688 Value = -1.552847e+09 
     ## elapsed = 0.00   Round = 5   w1 = 0.9405 w2 = 0.6557 w3 = 0.1524 Value = -5.604287e+08 
     ## elapsed = 0.00   Round = 6   w1 = 0.0456 w2 = 0.7085 w3 = 0.1388 Value = -1.147189e+07 
     ## elapsed = 0.00   Round = 7   w1 = 0.5281 w2 = 0.5441 w3 = 0.2330 Value = -9.315046e+07 
     ## elapsed = 0.00   Round = 8   w1 = 0.8924 w2 = 0.5941 w3 = 0.4660 Value = -9.073010e+08 
     ## elapsed = 0.00   Round = 9   w1 = 0.5514 w2 = 0.2892 w3 = 0.2660 Value = -1.135660e+07 
-    ## elapsed = 0.01   Round = 10  w1 = 0.4566 w2 = 0.1471 w3 = 0.8578 Value = -2.130340e+08 
+    ## elapsed = 0.00   Round = 10  w1 = 0.4566 w2 = 0.1471 w3 = 0.8578 Value = -2.130340e+08 
     ## elapsed = 0.00   Round = 11  w1 = 0.9568 w2 = 0.9630 w3 = 0.0458 Value = -9.325547e+08 
     ## elapsed = 0.00   Round = 12  w1 = 0.4533 w2 = 0.9023 w3 = 0.4422 Value = -6.365379e+08 
     ## elapsed = 0.00   Round = 13  w1 = 0.6776 w2 = 0.6907 w3 = 0.7989 Value = -1.362358e+09 
     ## elapsed = 0.00   Round = 14  w1 = 0.5726 w2 = 0.7955 w3 = 0.1219 Value = -2.401001e+08 
-    ## elapsed = 0.00   Round = 15  w1 = 0.1029 w2 = 0.0246 w3 = 0.5609 Value = -9.704073e+07 
+    ## elapsed = 0.02   Round = 15  w1 = 0.1029 w2 = 0.0246 w3 = 0.5609 Value = -9.704073e+07 
     ## elapsed = 0.00   Round = 16  w1 = 0.8998 w2 = 0.4778 w3 = 0.2065 Value = -3.412339e+08 
     ## elapsed = 0.00   Round = 17  w1 = 0.2461 w2 = 0.7585 w3 = 0.1275 Value = -1.744483e+07 
     ## elapsed = 0.00   Round = 18  w1 = 0.0421 w2 = 0.2164 w3 = 0.7533 Value = -1.386400e+05 
@@ -332,7 +331,7 @@ that do violate the constraint.
 ``` r
 search_grid[1:15,] <- normalize(search_grid[1:15,])
 (bayes_finance_norm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
-                                        init_grid_dt=search_grid, init_points=0))
+                                        init_grid_dt=search_grid))
 ```
 
     ## $par
@@ -373,7 +372,7 @@ finding the absolute optimum value.
 ``` r
 search_grid <- normalize(search_grid)
 (bayes_finance_allnorm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
-                                        init_grid_dt=search_grid, init_points=0, n_iter=1))
+                                        init_grid_dt=search_grid, n_iter=1))
 ```
 
     ## $par
