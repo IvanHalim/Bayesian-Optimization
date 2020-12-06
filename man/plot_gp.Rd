@@ -2,26 +2,47 @@
 % Please edit documentation in R/gaussian_process.R
 \name{plot_gp}
 \alias{plot_gp}
-\title{Title}
+\title{Plotting Gaussian Process}
 \usage{
 plot_gp(mu, cov, X, X_train = NULL, Y_train = NULL, samples = NULL)
 }
 \arguments{
-\item{mu}{}
+\item{mu}{a mean vector of length \code{m}.}
 
-\item{cov}{}
+\item{cov}{an \code{m * m} covariance matrix.}
 
-\item{X}{}
+\item{X_train}{the \code{x} coordinates of the training data.}
 
-\item{X_train}{}
+\item{Y_train}{the \code{y} coordinates of the training data.}
 
-\item{Y_train}{}
+\item{samples}{drawn from a multivariate normal distribution,
+an \code{n * length(mu)} matrix with one sample in each row`}
 
-\item{samples}{}
+\item{the}{\code{x} coordinates of points in the plot.}
 }
 \value{
-
+a ggplot object
 }
 \description{
-Title
+A utility function to plot a Gaussian Process
+}
+\examples{
+noise <- 0.4
+gpr <- gpr.init(sigma_y = noise)
+
+# Finite number of points
+X <- seq(-5, 5, 0.2)
+
+# Noisy training data
+X_train <- seq(-3, 3, 1)
+Y_train <- sin(X_train) + noise * rnorm(n = length(X_train))
+gpr <- gpr.fit(X_train, Y_train, gpr)
+
+# Compute mean and covariance of the posterior distribution
+result <- gpr.predict(X, gpr)
+mu_s <- result$mu_s
+cov_x <- result$cov_s
+
+samples <- mvrnorm(n = 3, mu = mu_s, Sigma = cov_s)
+plot_gp(mu_s, cov_s, X, X_train, Y_train, samples)
 }

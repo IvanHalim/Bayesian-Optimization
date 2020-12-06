@@ -9,8 +9,9 @@ gpr.fit(
   Y_train,
   gpr,
   lower = c(1e-05, 1e-05),
-  upper = c(9, 9),
-  n_restarts = 25
+  upper = c(2, 2),
+  n_restarts = 25,
+  naive = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ gpr.fit(
 \item{upper}{}
 
 \item{n_restarts}{}
+
+\item{naive}{}
 }
 \value{
 

@@ -2,22 +2,26 @@
 % Please edit documentation in R/gaussian_process.R
 \name{gaussian_kernel}
 \alias{gaussian_kernel}
-\title{Title}
+\title{Isotropic RBF Kernel}
 \usage{
 gaussian_kernel(x, y, l = 1, sigma_f = 1)
 }
 \arguments{
-\item{x}{}
+\item{x}{a numeric vector or a two-dimensional array of length \code{m}.}
 
-\item{y}{}
+\item{y}{a numeric vector or a two-dimensional array of length \code{n}. Must be the same type of object as \code{x}.}
 
-\item{l}{}
+\item{l}{the length parameter that controls the smoothness of the function}
 
-\item{sigma_f}{}
+\item{sigma_f}{the scale parameter that controls the vertical variation.}
 }
 \value{
-
+an \code{m * n} similarity matrix
 }
 \description{
-Title
+Compute the squared euclidean distance similarity measure between two sets of points.
+}
+\examples{
+gaussian_kernel(c(1,2,3,4), c(5,6))
+gaussian_kernel(diag(3), t(c(1,2,3))
 }

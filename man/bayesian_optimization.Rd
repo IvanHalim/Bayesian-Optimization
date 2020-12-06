@@ -9,12 +9,13 @@ bayesian_optimization(
   lower,
   upper,
   init_grid_dt = NULL,
-  init_points = 1,
+  init_points = 0,
   n_iter = 10,
   xi = 0.01,
   noise = 0,
   max = TRUE,
-  acq = expected_improvement
+  acq = expected_improvement,
+  naive = FALSE
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ bayesian_optimization(
 \item{max}{}
 
 \item{acq}{}
+
+\item{naive}{}
 }
 \value{
 

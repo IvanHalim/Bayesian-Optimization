@@ -165,7 +165,7 @@ n_iter <- 10
 
 for (i in 1:n_iter) {
     # Update Gaussian process with existing samples
-    gpr <- gpr.fit(X_sample, Y_sample, gpr)
+    gpr <- gpr.fit(X_sample, Y_sample, gpr, naive=TRUE)
     
     result <- gpr.predict(X, gpr)
     mu_s <- result$mu_s

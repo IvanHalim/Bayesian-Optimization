@@ -2,18 +2,36 @@
 % Please edit documentation in R/gaussian_process.R
 \name{gpr.predict}
 \alias{gpr.predict}
-\title{Title}
+\title{Posterior Predictive Distribution}
 \usage{
 gpr.predict(X, gpr)
 }
 \arguments{
-\item{X}{}
+\item{X}{new input locations \code{n * d}.}
 
-\item{gpr}{}
+\item{gpr}{a classifier object containing training data and additional parameters.}
 }
 \value{
-
+Posterior mean vector \code{n * d} and covariance matrix \code{n * n}.
 }
 \description{
-Title
+Computes the mean vector and the covariance matrix of the
+posterior distribution from \code{m} training data and \code{n} new inputs.
+}
+\examples{
+noise <- 0.4
+gpr <- gpr.init(sigma_y = noise)
+
+# Finite number of points
+X <- seq(-5, 5, 0.2)
+
+# Noisy training data
+X_train <- seq(-3, 3, 1)
+Y_train <- sin(X_train) + noise * rnorm(n = length(X_train))
+gpr <- gpr.fit(X_train, Y_train, gpr)
+
+# Compute mean and covariance of the posterior distribution
+result <- gpr.predict(X, gpr)
+mu_s <- result$mu_s
+cov_x <- result$cov_s
 }

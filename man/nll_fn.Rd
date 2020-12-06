@@ -2,22 +2,33 @@
 % Please edit documentation in R/gaussian_process.R
 \name{nll_fn}
 \alias{nll_fn}
-\title{Title}
+\title{Negative log-likelihood function}
 \usage{
-nll_fn(X_train, Y_train, noise, kernel)
+nll_fn(X_train, Y_train, noise, kernel, naive = FALSE)
 }
 \arguments{
-\item{X_train}{}
+\item{X_train}{training location \code{m * d}}
 
-\item{Y_train}{}
+\item{Y_train}{training targets \code{m * 1}}
 
-\item{noise}{}
+\item{noise}{known noise level of \code{Y_train}}
 
-\item{kernel}{}
+\item{kernel}{kernel function used}
+
+\item{naive}{if TRUE use a naive implementation, if FALSE use a numerically more stable implementation.}
 }
 \value{
-
+A function that computes the negative log-likelihood w.r.t.
+parameters \code{l} and \code{sigma_f}
 }
 \description{
-Title
+Returns a function that computes the negative log marginal
+likelihood for training data \code{X_train} and \code{Y_train} and given
+noise level.
+}
+\examples{
+noise <- 0.4
+X_train <- seq(-3, 3, 1)
+Y_train <- sin(X_train) + noise * rnorm(n = length(X_train))
+nll_fn(X_train, Y_train, noise, gaussian_kernel)
 }

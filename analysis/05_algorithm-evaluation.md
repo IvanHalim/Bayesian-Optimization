@@ -59,15 +59,15 @@ The parameters include:
 
 ``` r
 (bayes_finance <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
-                                        init_grid_dt=search_grid, init_points=10))
+                                        init_grid_dt=search_grid))
 ```
 
     ## $par
-    ##        w1        w2        w3 
-    ## 0.0000000 0.3993422 0.6012231 
+    ##         w1         w2         w3 
+    ## 0.04205953 0.21640794 0.75330786 
     ## 
     ## $value
-    ## [1] -304.0334
+    ## [1] -138640
 
 Result of the function consists of a list with 2 components:
 
@@ -80,7 +80,7 @@ So, what is the optimum Sharpe Ratio from Bayesian optimization?
 bayes_finance$value
 ```
 
-    ## [1] -304.0334
+    ## [1] -138640
 
 The greater a portfolio’s Sharpe ratio, the better its risk-adjusted
 performance. If the analysis results in a negative Sharpe ratio, it
@@ -93,9 +93,9 @@ Let’s check the total weight of the optimum result.
 sum(bayes_finance$par)
 ```
 
-    ## [1] 1.000565
+    ## [1] 1.011775
 
-The sum slightly exceeds 1, which is probably the reason why our
+Our weights violate the constraint, which is probably the reason why our
 Sharpe’s Ratio is negative. More work can be done to improve sampling
 for next ![equation](https://latex.codecogs.com/gif.latex?x) as well as
 finding the optimum value for parameters
@@ -115,9 +115,9 @@ distributed.
 ```
 
     ##   stock                             Security weight
-    ## 1  ULTA Ulta Salon Cosmetics & Fragrance Inc 60.12%
-    ## 2  ORLY                  O'Reilly Automotive 39.93%
-    ## 3   NFX              Newfield Exploration Co  0.00%
+    ## 1  ULTA Ulta Salon Cosmetics & Fragrance Inc 75.33%
+    ## 2  ORLY                  O'Reilly Automotive 21.64%
+    ## 3   NFX              Newfield Exploration Co  4.21%
 
 ## `rBayesianOptimization` Package
 
@@ -159,9 +159,9 @@ rbayes_finance <- BayesianOptimization(FUN = fitness, bounds = search_bound,
                      init_grid_dt = search_grid_df, n_iter = 10, acq = "ei")
 ```
 
-    ## elapsed = 0.07   Round = 1   w1 = 0.2876 w2 = 0.8895 w3 = 0.1428 Value = -1.023468e+08 
+    ## elapsed = 0.00   Round = 1   w1 = 0.2876 w2 = 0.8895 w3 = 0.1428 Value = -1.023468e+08 
     ## elapsed = 0.00   Round = 2   w1 = 0.7883 w2 = 0.6928 w3 = 0.4145 Value = -8.021977e+08 
-    ## elapsed = 0.01   Round = 3   w1 = 0.4090 w2 = 0.6405 w3 = 0.4137 Value = -2.145617e+08 
+    ## elapsed = 0.00   Round = 3   w1 = 0.4090 w2 = 0.6405 w3 = 0.4137 Value = -2.145617e+08 
     ## elapsed = 0.00   Round = 4   w1 = 0.8830 w2 = 0.9943 w3 = 0.3688 Value = -1.552847e+09 
     ## elapsed = 0.00   Round = 5   w1 = 0.9405 w2 = 0.6557 w3 = 0.1524 Value = -5.604287e+08 
     ## elapsed = 0.00   Round = 6   w1 = 0.0456 w2 = 0.7085 w3 = 0.1388 Value = -1.147189e+07 
@@ -173,7 +173,7 @@ rbayes_finance <- BayesianOptimization(FUN = fitness, bounds = search_bound,
     ## elapsed = 0.00   Round = 12  w1 = 0.4533 w2 = 0.9023 w3 = 0.4422 Value = -6.365379e+08 
     ## elapsed = 0.00   Round = 13  w1 = 0.6776 w2 = 0.6907 w3 = 0.7989 Value = -1.362358e+09 
     ## elapsed = 0.00   Round = 14  w1 = 0.5726 w2 = 0.7955 w3 = 0.1219 Value = -2.401001e+08 
-    ## elapsed = 0.02   Round = 15  w1 = 0.1029 w2 = 0.0246 w3 = 0.5609 Value = -9.704073e+07 
+    ## elapsed = 0.00   Round = 15  w1 = 0.1029 w2 = 0.0246 w3 = 0.5609 Value = -9.704073e+07 
     ## elapsed = 0.00   Round = 16  w1 = 0.8998 w2 = 0.4778 w3 = 0.2065 Value = -3.412339e+08 
     ## elapsed = 0.00   Round = 17  w1 = 0.2461 w2 = 0.7585 w3 = 0.1275 Value = -1.744483e+07 
     ## elapsed = 0.00   Round = 18  w1 = 0.0421 w2 = 0.2164 w3 = 0.7533 Value = -1.386400e+05 
@@ -323,13 +323,10 @@ function evaluation is cheap.
 ## Normalization
 
 We could also normalize our search grid to ensure that the weights don’t
-add up to more than 1, therefore not violating the constraint. We’re
-only going to normalize the first 15 rows of the search grid, to balance
-the number of data points that don’t violate the constraint and those
-that do violate the constraint.
+add up to more than 1, therefore not violating the constraint.
 
 ``` r
-search_grid[1:15,] <- normalize(search_grid[1:15,])
+search_grid <- normalize(search_grid)
 (bayes_finance_norm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
                                         init_grid_dt=search_grid))
 ```
@@ -363,16 +360,17 @@ Based on normalized Bayes, here is how your asset should be distributed.
 
 ## Pushing the limit
 
-Suppose we don’t want any data points that violates the constraint.
-Having data points that violate the constraint allows us to run more
-iterations of Bayesian Optimization but also makes it more tolerant to
-slight variations of the fitness value, therefore preventing us from
-finding the absolute optimum value.
+Our implementation uses QR decomposition to find the least squares
+solution to avoid having to compute the inverse of a close to singular
+matrix. This means that our implementation is stable but it is also
+tolerant to slight fluctuations in the fitness value. Suppose we want to
+make it stricter by using the naive implementation, but at the cost of
+being less stable.
 
 ``` r
 search_grid <- normalize(search_grid)
-(bayes_finance_allnorm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
-                                        init_grid_dt=search_grid, n_iter=1))
+(bayes_finance_naive <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
+                                        init_grid_dt=search_grid, n_iter=1, naive=TRUE))
 ```
 
     ## $par
@@ -383,15 +381,15 @@ search_grid <- normalize(search_grid)
     ## [1] 20.13223
 
 The solution has a Sharpe Ratio of 20.1322 which is even higher than the
-previous one! However, this only works after setting `n_iter` to only 1
-iteration, making it a much less stable problem to solve.
+previous one! However, keep in mind that this only works after setting
+`n_iter` to only 1 iteration.
 
 Based on the all-normalized Bayes, here is how your asset should be
 distributed.
 
 ``` r
-(bayes_allnorm_result <- data.frame(stock = unique(nyse$symbol),
-                                 weight = bayes_finance_allnorm$par) %>%
+(bayes_naive_result <- data.frame(stock = unique(nyse$symbol),
+                                 weight = bayes_finance_naive$par) %>%
                   arrange(desc(weight)) %>%
                   mutate(weight = percent(weight, accuracy = 0.01)) %>%
                   left_join(securities, by = "stock") %>%
@@ -408,5 +406,5 @@ write_csv(bayes_result, here("results", "bayes_result.csv"))
 write_csv(rbayes_result, here("results", "rbayes_result.csv"))
 write_csv(pso_result, here("results", "pso_result.csv"))
 write_csv(bayes_norm_result, here("results", "bayes_norm_result.csv"))
-write_csv(bayes_allnorm_result, here("results", "bayes_allnorm_result.csv"))
+write_csv(bayes_naive_result, here("results", "bayes_naive_result.csv"))
 ```

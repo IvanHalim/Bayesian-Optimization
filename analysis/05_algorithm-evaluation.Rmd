@@ -62,7 +62,7 @@ Let's run the algorithm `bayesian_optimization()` that we implemented. The param
 
 ```{r}
 (bayes_finance <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
-                                        init_grid_dt=search_grid, init_points=10))
+                                        init_grid_dt=search_grid))
 ```
 
 Result of the function consists of a list with 2 components:
@@ -83,7 +83,7 @@ Let's check the total weight of the optimum result.
 ```{r}
 sum(bayes_finance$par)
 ```
-The sum slightly exceeds 1, which is probably the reason why our Sharpe's Ratio is negative. More work can be done to improve sampling for next ![equation](https://latex.codecogs.com/gif.latex?x) as well as finding the optimum value for parameters ![equation](https://latex.codecogs.com/gif.latex?l) and ![equation](https://latex.codecogs.com/gif.latex?%5Csigma_f). 
+Our weights violate the constraint, which is probably the reason why our Sharpe's Ratio is negative. More work can be done to improve sampling for next ![equation](https://latex.codecogs.com/gif.latex?x) as well as finding the optimum value for parameters ![equation](https://latex.codecogs.com/gif.latex?l) and ![equation](https://latex.codecogs.com/gif.latex?%5Csigma_f). 
 
 Based on Bayesian Optimization, here is how your asset should be distributed.
 
@@ -225,10 +225,10 @@ For this problem, PSO works better than Bayesian Optimization, indicated by the 
 
 ## Normalization
 
-We could also normalize our search grid to ensure that the weights don't add up to more than 1, therefore not violating the constraint. We're only going to normalize the first 15 rows of the search grid, to balance the number of data points that don't violate the constraint and those that do violate the constraint.
+We could also normalize our search grid to ensure that the weights don't add up to more than 1, therefore not violating the constraint.
 
 ```{r}
-search_grid[1:15,] <- normalize(search_grid[1:15,])
+search_grid <- normalize(search_grid)
 (bayes_finance_norm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
                                         init_grid_dt=search_grid))
 ```
@@ -247,21 +247,21 @@ Based on normalized Bayes, here is how your asset should be distributed.
 
 ## Pushing the limit
 
-Suppose we don't want any data points that violates the constraint. Having data points that violate the constraint allows us to run more iterations of Bayesian Optimization but also makes it more tolerant to slight variations of the fitness value, therefore preventing us from finding the absolute optimum value.
+Our implementation uses QR decomposition to find the least squares solution to avoid having to compute the inverse of a close to singular matrix. This means that our implementation is stable but it is also tolerant to slight fluctuations in the fitness value. Suppose we want to make it stricter by using the naive implementation, but at the cost of being less stable.
 
 ```{r}
 search_grid <- normalize(search_grid)
-(bayes_finance_allnorm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
-                                        init_grid_dt=search_grid, n_iter=1))
+(bayes_finance_naive <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
+                                        init_grid_dt=search_grid, n_iter=1, naive=TRUE))
 ```
 
-The solution has a Sharpe Ratio of `r round(bayes_finance_allnorm$value, 4)` which is even higher than the previous one! However, this only works after setting `n_iter` to only 1 iteration, making it a much less stable problem to solve.
+The solution has a Sharpe Ratio of `r round(bayes_finance_naive$value, 4)` which is even higher than the previous one! However, keep in mind that this only works after setting `n_iter` to only 1 iteration.
 
 Based on the all-normalized Bayes, here is how your asset should be distributed.
 
 ```{r}
-(bayes_allnorm_result <- data.frame(stock = unique(nyse$symbol),
-                                 weight = bayes_finance_allnorm$par) %>%
+(bayes_naive_result <- data.frame(stock = unique(nyse$symbol),
+                                 weight = bayes_finance_naive$par) %>%
                   arrange(desc(weight)) %>%
                   mutate(weight = percent(weight, accuracy = 0.01)) %>%
                   left_join(securities, by = "stock") %>%
@@ -273,5 +273,5 @@ write_csv(bayes_result, here("results", "bayes_result.csv"))
 write_csv(rbayes_result, here("results", "rbayes_result.csv"))
 write_csv(pso_result, here("results", "pso_result.csv"))
 write_csv(bayes_norm_result, here("results", "bayes_norm_result.csv"))
-write_csv(bayes_allnorm_result, here("results", "bayes_allnorm_result.csv"))
+write_csv(bayes_naive_result, here("results", "bayes_naive_result.csv"))
 ```

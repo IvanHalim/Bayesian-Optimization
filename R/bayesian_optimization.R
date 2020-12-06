@@ -89,13 +89,14 @@ propose_location <- function(acquisition, X_sample, Y_sample, gpr,
 #' @param noise 
 #' @param max 
 #' @param acq 
+#' @param naive 
 #'
 #' @return
 #' @export
 #'
 #' @examples
 bayesian_optimization <- function(FUN, lower, upper, init_grid_dt=NULL, init_points=0,
-                                  n_iter=10, xi=0.01, noise=0, max=TRUE, acq=expected_improvement) {
+                                  n_iter=10, xi=0.01, noise=0, max=TRUE, acq=expected_improvement, naive=FALSE) {
   
   X_train <- init_grid_dt
   
@@ -112,7 +113,7 @@ bayesian_optimization <- function(FUN, lower, upper, init_grid_dt=NULL, init_poi
   
   for (i in 1:n_iter) {
     # Update Gaussian process with existing samples
-    gpr <- gpr.fit(X_train, Y_train, gpr)
+    gpr <- gpr.fit(X_train, Y_train, gpr, naive=naive)
     
     # Obtain next sampling point from the acquisition function
     X_next <- propose_location(acq, X_train, Y_train, gpr, lower, upper, xi=xi, max=max)

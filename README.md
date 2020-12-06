@@ -327,20 +327,20 @@ The parameters include:
 
 ``` r
 bayes_finance <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
-                                          init_grid_dt=search_grid, init_points=10)
+                                          init_grid_dt=search_grid)
 ```
 
     ## $par
-    ##        w1        w2        w3 
-    ## 0.0000000 0.3993419 0.6012236 
+    ##         w1         w2         w3 
+    ## 0.04205953 0.21640794 0.75330786 
     ## 
     ## $value
-    ## [1] -304.2126
+    ## [1] -138640
 
 Result of the function consists of a list with 2 components:
 
-  - par: a vector of the best hyperparameter set found
-  - value: the value of metrics achieved by the best hyperparameter set
+  - `par`: a vector of the best hyperparameter set found
+  - `value`: the value of metrics achieved by the best hyperparameter set
 
 So, what is the optimum Sharpe Ratio from Bayesian optimization?
 
@@ -348,7 +348,7 @@ So, what is the optimum Sharpe Ratio from Bayesian optimization?
 bayes_finance$value
 ```
 
-    ## [1] -304.2126
+    ## [1] -138640
 
 The greater a portfolio’s Sharpe ratio, the better its risk-adjusted
 performance. If the analysis results in a negative Sharpe ratio, it
@@ -361,9 +361,9 @@ Let’s check the total weight of the optimum result.
 sum(bayes_finance$par)
 ```
 
-    ## [1] 1.000566
+    ## [1] 1.011775
 
-The sum slightly exceeds 1, which is probably the reason why our
+Our weights violate the constraint, which is probably the reason why our
 Sharpe’s Ratio is negative. More work can be done to improve sampling
 for next ![equation](https://latex.codecogs.com/gif.latex?x) as well as
 finding the optimum value for parameters
@@ -374,9 +374,9 @@ Based on Bayesian Optimization, here is how your asset should be
 distributed.
 
     ##   stock                             Security weight
-    ## 1  ULTA Ulta Salon Cosmetics & Fragrance Inc 60.12%
-    ## 2  ORLY                  O'Reilly Automotive 39.93%
-    ## 3   NFX              Newfield Exploration Co  0.00%
+    ## 1  ULTA Ulta Salon Cosmetics & Fragrance Inc 75.33%
+    ## 2  ORLY                  O'Reilly Automotive 21.64%
+    ## 3   NFX              Newfield Exploration Co  4.21%
 
 #### `rBayesianOptimization` Package
 
@@ -479,10 +479,10 @@ function evaluation is cheap.
 #### Normalization
 
 We could also normalize our search grid to ensure that the weights don’t
-add up to more than 1, therefore not violating the constraint. We're only going to normalize the first 15 rows of the search grid, to balance the number of data points that don't violate the constraint vs those that do violate the constraint.
+add up to more than 1, therefore not violating the constraint.
 
 ``` r
-search_grid[1:15,] <- normalize(search_grid[1:15,])
+search_grid <- normalize(search_grid)
 bayes_finance_norm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
                                         init_grid_dt=search_grid)
 ```
@@ -494,7 +494,7 @@ bayes_finance_norm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper
     ## $value
     ## [1] 19.69707
 
-The solution has a Sharpe Ratio of 20.1324. We achieve a higher
+The solution has a Sharpe Ratio of 19.6971. We achieve a higher
 performance than both `rBayesianOptimization` and Particle Swarm Optimization\!
 
 Based on normalized Bayes, here is how your asset should be distributed.
@@ -506,16 +506,16 @@ Based on normalized Bayes, here is how your asset should be distributed.
     
 #### Pushing the limit
 
-Suppose we don’t want any data points that violates the constraint.
-Having data points that violate the constraint allows us to run more
-iterations of Bayesian Optimization but also makes it more tolerant to
-slight variations of the fitness value, therefore preventing us from
-finding the absolute optimum value.
+Our implementation uses QR decomposition to find the least squares
+solution to avoid having to compute the inverse of a close to singular
+matrix. This means that our implementation is stable but it is also
+tolerant to slight fluctuations in the fitness value. Suppose we want to
+make it stricter by using the naive implementation, but at the cost of
+being less stable.
 
 ``` r
-search_grid <- normalize(search_grid)
 bayes_finance_allnorm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
-                                        init_grid_dt=search_grid, n_iter=1)
+                                        init_grid_dt=search_grid, n_iter=1, naive=TRUE)
 ```
 
     ## $par
@@ -526,10 +526,9 @@ bayes_finance_allnorm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, up
     ## [1] 20.13223
 
 The solution has a Sharpe Ratio of 20.1322 which is even higher than the
-previous one! However, this only works after setting `n_iter` to only 1
-iteration, making it a much less stable problem to solve.
+previous one! However, keep in mind that this only works after setting `n_iter` to just 1 iteration.
 
-Based on the all-normalized Bayes, here is how your asset should be
+Based on the naive implementation, here is how your asset should be
 distributed.
 
     ##   stock                             Security weight

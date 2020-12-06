@@ -4,7 +4,7 @@
 \alias{plot_acquisition}
 \title{Title}
 \usage{
-plot_acquisition(X, EI, X_next)
+plot_acquisition(X, EI, X_next = NULL)
 }
 \arguments{
 \item{X}{}
