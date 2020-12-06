@@ -362,7 +362,7 @@ Based on normalized Bayes, here is how your asset should be distributed.
 
 Our implementation uses QR decomposition to find the least squares
 solution to avoid having to compute the inverse of a close to singular
-matrix. This means that our implementation is stable but it is also
+matrix. This means that our implementation is numerically more stable but it is also
 tolerant to slight fluctuations in the fitness value. Suppose we want to
 make it stricter by using the naive implementation, but at the cost of
 being less stable.
@@ -382,9 +382,9 @@ search_grid <- normalize(search_grid)
 
 The solution has a Sharpe Ratio of 20.1322 which is even higher than the
 previous one! However, keep in mind that this only works after setting
-`n_iter` to only 1 iteration.
+`n_iter` to just 1 iteration.
 
-Based on the all-normalized Bayes, here is how your asset should be
+Based on the naive implementation, here is how your asset should be
 distributed.
 
 ``` r
