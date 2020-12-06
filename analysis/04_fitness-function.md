@@ -31,28 +31,34 @@ or the portfolio’s return is expected to be negative.
 
 The fitness function is shown below:
 
-\[
-\max f(x) = \frac{\sum\limits_{i=1}^N W_i \ast r_i - R_f}{\sum\limits_{i=1}^N \sum\limits_{j=1}^N W_i \ast W_j \ast \sigma_{ij}}
-\]
+![equation](https://latex.codecogs.com/gif.latex?%5Cmax%20f%28x%29%20%3D%20%5Cfrac%7B%5Csum%5Climits_%7Bi%3D1%7D%5EN%20W_i%20%5Cast%20r_i%20-%20R_f%7D%7B%5Csum%5Climits_%7Bi%3D1%7D%5EN%20%5Csum%5Climits_%7Bj%3D1%7D%5EN%20W_i%20%5Cast%20W_j%20%5Cast%20%5Csigma_%7Bij%7D%7D)
 
 **Subject To**
 
-\[
-\sum\limits_{i=1}^N W_i = 1 \\
-0 \leq W_i \leq 1 \\
-i = 1,2,...,N
-\]
+![equation](https://latex.codecogs.com/gif.latex?%5Csum%5Climits_%7Bi%3D1%7D%5EN%20W_i%20%3D%201)
 
-  - \(N\): Number of different assets
-  - \(W_i\): Weight of each stock in the portfolio
-  - \(r_i\): Return of stock i
-  - \(R_f\): The test available rate of return of a risk-free security
-    (i.e. the interest rate on a three month U.S. Treasury bill)
-  - \(\sigma_{ij}\): Covariance between returns of assets i and j
+![equation](https://latex.codecogs.com/gif.latex?0%20%5Cleq%20W_i%20%5Cleq%201)
 
-Adjusting the portfolio weights \(w_i\), we can maximize the portfolio
-Sharpe Ratio in effect balancing the trade-off between maximizing the
-expected return and at the same time minimizing the risk.
+![equation](https://latex.codecogs.com/gif.latex?i%20%3D%201%2C2%2C...%2CN)
+
+-   ![equation](https://latex.codecogs.com/gif.latex?N): Number of
+    different assets
+-   ![equation](https://latex.codecogs.com/gif.latex?W_i): Weight of
+    each stock in the portfolio
+-   ![equation](https://latex.codecogs.com/gif.latex?r_i): Return of
+    stock ![equation](https://latex.codecogs.com/gif.latex?i)
+-   ![equation](https://latex.codecogs.com/gif.latex?R_f): The test
+    available rate of return of a risk-free security (i.e. the interest
+    rate on a three month U.S. Treasury bill)
+-   ![equation](https://latex.codecogs.com/gif.latex?%5Csigma_%7Bij%7D):
+    Covariance between returns of assets
+    ![equation](https://latex.codecogs.com/gif.latex?i) and
+    ![equation](https://latex.codecogs.com/gif.latex?j)
+
+Adjusting the portfolio weights
+![equation](https://latex.codecogs.com/gif.latex?w_i), we can maximize
+the portfolio Sharpe Ratio in effect balancing the trade-off between
+maximizing the expected return and at the same time minimizing the risk.
 
 ## Define Fitness Function
 

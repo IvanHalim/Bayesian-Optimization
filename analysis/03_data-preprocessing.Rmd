@@ -82,7 +82,7 @@ mean_stock <- nyse %>%
 head(mean_stock)
 ```
 
-The value of $R_f$ is acquired from the latest interest rate on a three-month U.S. Treasury bill. Since the data is from 2016, we will use data from 2015 (Use data from March 27, 2015), which is 0.04%. The rate is acquired from https://ycharts.com/indicators/3_month_t_bill.
+The value of ![equation](https://latex.codecogs.com/gif.latex?R_f) is acquired from the latest interest rate on a three-month U.S. Treasury bill. Since the data is from 2016, we will use data from 2015 (Use data from March 27, 2015), which is 0.04%. The rate is acquired from https://ycharts.com/indicators/3_month_t_bill.
 
 ```{r}
 rf <- 0.04/100

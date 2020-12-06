@@ -15,79 +15,82 @@ is high. Both correspond to high acquisition function values and the
 goal is to maximize the acquisition function to determine the next
 sampling point.
 
-More formally, the objective function \(f\) will be sampled at
-\(x_t = \arg\max_x u(x| \mathcal{D}_{1:t-1})\) where \(u\) is the
+More formally, the objective function
+![equation](https://latex.codecogs.com/gif.latex?f) will be sampled at
+![equation](https://latex.codecogs.com/gif.latex?x_t%20%3D%20%5Carg%5Cmax_x%20u%28x%7C%20%5Cmathcal%7BD%7D_%7B1%3At-1%7D%29)
+where ![equation](https://latex.codecogs.com/gif.latex?u) is the
 acquisition function and
-\(\mathcal{D}_{1:t-1} = \{(x_1, y_1),...,(x_{t-1},y_{t-1})\}\) are the
-\(t-1\) samples drawn from \(f\) so far. Popular acquisition functions
-are *maximum probability of improvement* (MPI), *expected improvement*
-(EI) and *upper confidence bound* (UCB). In the following, we will use
-the expected improvement (EI) which is most widely used and described
-further below.
+![equation](https://latex.codecogs.com/gif.latex?%5Cmathcal%7BD%7D_%7B1%3At-1%7D%20%3D%20%5C%7B%28x_1%2C%20y_1%29%2C...%2C%28x_%7Bt-1%7D%2Cy_%7Bt-1%7D%29%5C%7D)
+are the ![equation](https://latex.codecogs.com/gif.latex?t-1) samples
+drawn from ![equation](https://latex.codecogs.com/gif.latex?f) so far.
+Popular acquisition functions are *maximum probability of improvement*
+(MPI), *expected improvement* (EI) and *upper confidence bound* (UCB).
+In the following, we will use the expected improvement (EI) which is
+most widely used and described further below.
 
 ### Optimization algorithm
 
-The Bayesian optimization procedure is as follows. For \(t = 1, 2, ...\)
+The Bayesian optimization procedure is as follows. For
+![equation](https://latex.codecogs.com/gif.latex?t%20%3D%201%2C%202%2C%20...)
 repeat:
 
-  - Find the next sampling point \(x_t\) by optimizing the acquisition
-    function over the GP: \(x_t = \arg\max_x u(x|\mathcal{D}_{1:t-1})\)
-  - Obtain a possibly noisy sample \(y_t = f(x_t) + \epsilon_t\) from
-    the objective function \(f\).
-  - Add the sample to previous samples
-    \(\mathcal{D}_{1:t} = \{\mathcal{D}_{1:t-1},(x_t, y_t)\}\) and
-    update the GP.
+-   Find the next sampling point
+    ![equation](https://latex.codecogs.com/gif.latex?x_t) by optimizing
+    the acquisition function over the GP:
+    ![equation](https://latex.codecogs.com/gif.latex?x_t%20%3D%20%5Carg%5Cmax_x%20u%28x%7C%5Cmathcal%7BD%7D_%7B1%3At-1%7D%29)
+-   Obtain a possibly noisy sample
+    ![equation](https://latex.codecogs.com/gif.latex?y_t%20%3D%20f%28x_t%29%20+%20%5Cepsilon_t)
+    from the objective function
+    ![equation](https://latex.codecogs.com/gif.latex?f).
+-   Add the sample to previous samples
+    ![equation](https://latex.codecogs.com/gif.latex?%5Cmathcal%7BD%7D_%7B1%3At%7D%20%3D%20%5C%7B%5Cmathcal%7BD%7D_%7B1%3At-1%7D%2C%28x_t%2C%20y_t%29%5C%7D)
+    and update the GP.
 
 ### Expected improvement
 
 Expected improvement is defined as
 
-\[
-EI(x) = \mathbb{E}\max(f(x)-f(x^+),0)
-\]
+![equation](https://latex.codecogs.com/gif.latex?EI%28x%29%20%3D%20%5Cmathbb%7BE%7D%5Cmax%28f%28x%29-f%28x%5E+%29%2C0%29)
 
-where \(f(x^+)\) is the value of the best sample so far and \(x^+\) is
-the location of that sample
-i.e. \(x^+ = \arg\max_{x_i \in x_{1:t}}f(x_i)\). The expected
-improvement can be evaluated analytically under the GP model:
+where ![equation](https://latex.codecogs.com/gif.latex?f%28x%5E+%29) is
+the value of the best sample so far and
+![equation](https://latex.codecogs.com/gif.latex?x%5E+) is the location
+of that sample
+i.e. ![equation](https://latex.codecogs.com/gif.latex?x%5E+%20%3D%20%5Carg%5Cmax_%7Bx_i%20%5Cin%20x_%7B1%3At%7D%7Df%28x_i%29).
+The expected improvement can be evaluated analytically under the GP
+model:
 
-\[
-EI(x) =
-\begin{cases}
-(\mu(x) - f(x^+) - \xi)\Phi(Z) + \sigma(x)\phi(Z) & \mbox{if } \sigma(x) > 0 \\
-0 & \mbox{if } \sigma(x) = 0
-\end{cases}
-\]
+![equation](https://latex.codecogs.com/gif.latex?EI%28x%29%20%3D%20%5Cbegin%7Bcases%7D%20%28%5Cmu%28x%29%20-%20f%28x%5E+%29%20-%20%5Cxi%29%5CPhi%28Z%29%20+%20%5Csigma%28x%29%5Cphi%28Z%29%20%26%20%5Cmbox%7Bif%20%7D%20%5Csigma%28x%29%20%3E%200%20%5C%5C%200%20%26%20%5Cmbox%7Bif%20%7D%20%5Csigma%28x%29%20%3D%200%20%5Cend%7Bcases%7D)
 
-where
+Where,
 
-\[
-Z =
-\begin{cases}
-\frac{\mu(x) - f(x^+) - \xi}{\sigma(x)} & \mbox{if } \sigma(x) > 0 \\
-0 & \mbox{if } \sigma(x) = 0
-\end{cases}
-\]
+![equation](https://latex.codecogs.com/gif.latex?Z%20%3D%20%5Cbegin%7Bcases%7D%20%5Cfrac%7B%5Cmu%28x%29%20-%20f%28x%5E+%29%20-%20%5Cxi%7D%7B%5Csigma%28x%29%7D%20%26%20%5Cmbox%7Bif%20%7D%20%5Csigma%28x%29%20%3E%200%20%5C%5C%200%20%26%20%5Cmbox%7Bif%20%7D%20%5Csigma%28x%29%20%3D%200%20%5Cend%7Bcases%7D)
 
-where \(\mu(x)\) and \(\sigma(x)\) are the mean and the standard
-deviation of the GP posterior predictive at \(x\), respectively.
-\(\Phi\) and \(\phi\) are the CDF and PDF of the standard normal
-distribution, respectively. The first summation term in Equation (2) is
-the exploitation term and second summation term is the exploration term.
+where ![equation](https://latex.codecogs.com/gif.latex?%5Cmu%28x%29) and
+![equation](https://latex.codecogs.com/gif.latex?%5Csigma%28x%29) are
+the mean and the standard deviation of the GP posterior predictive at
+![equation](https://latex.codecogs.com/gif.latex?x), respectively.
+![equation](https://latex.codecogs.com/gif.latex?%5CPhi) and
+![equation](https://latex.codecogs.com/gif.latex?%5Cphi) are the CDF and
+PDF of the standard normal distribution, respectively. The first
+summation term in Equation (2) is the exploitation term and second
+summation term is the exploration term.
 
-Parameter \(\xi\) in Equation (2) determines the amount of exploration
-during optimization and higher \(xi\) values lead to more exploration.
-In other words, with increasing \(\xi\) values, the importance of
-improvements predicted by the GP posterior mean \(\mu(x)\) decreases
+Parameter ![equation](https://latex.codecogs.com/gif.latex?%5Cxi) in
+Equation (2) determines the amount of exploration during optimization
+and higher ![equation](https://latex.codecogs.com/gif.latex?%5Cxi)
+values lead to more exploration. In other words, with increasing
+![equation](https://latex.codecogs.com/gif.latex?%5Cxi) values, the
+importance of improvements predicted by the GP posterior mean
+![equation](https://latex.codecogs.com/gif.latex?%5Cmu%28x%29) decreases
 relative to the importance of potential improvements in regions of high
-prediction uncertainty, represented by large \(\sigma(x)\) values. A
-recommended default value for \(\xi\) is 0.01.
+prediction uncertainty, represented by large
+![equation](https://latex.codecogs.com/gif.latex?%5Csigma%28x%29)
+values. A recommended default value for
+![equation](https://latex.codecogs.com/gif.latex?%5Cxi) is 0.01.
 
 With this minimum theory we can start implementing Bayesian
-optimization. The next section shows a basic implementation with plain
-NumPy and SciPy, later sections demonstrate how to use existing
-libraries. Finally, Bayesian optimization is used to tune the
-hyperparameters of a tree-based regression model.
+optimization.
 
 ## Implementation
 
@@ -131,8 +134,7 @@ ggplot(eval, aes(X, Y)) +
 
 Goal is to find the global optimum on the left in a small number of
 steps. The next step is to implement the acquisition function defined in
-Equation (2) as `expected_improvement`
-function.
+Equation (2) as `expected_improvement` function.
 
 ``` r
 expected_improvement <- function(X, X_sample, Y_sample, gpr, xi=0.01, max=TRUE) {

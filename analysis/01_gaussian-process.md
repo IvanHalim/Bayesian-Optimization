@@ -7,33 +7,48 @@ Ivan Timothy Halim
 
 ## Introduction
 
-In supervised learning, we often use parametric models \(p(y|X,\theta)\)
-to explain data and infer optimal values of parameter \(\theta\) via
-maximum likelihood or maximum a posteriori estimation. If needed we can
-also infer a full posterior distribution \(p(\theta|X,y)\) instead of a
-point estimate \(\hat{\theta}\). With increasing data complexity, models
-with a higher number of parameters are usually needed to explain data
-reasonably well. Methods that use models with a fixed number of
-parameters are called parametric methods.
+In supervised learning, we often use parametric models
+![equation](https://latex.codecogs.com/gif.latex?p%28y%7CX%2C%5Ctheta%29)
+to explain data and infer optimal values of parameter
+![equation](https://latex.codecogs.com/gif.latex?%5Ctheta) via maximum
+likelihood or maximum a posteriori estimation. If needed we can also
+infer a full posterior distribution
+![equation](https://latex.codecogs.com/gif.latex?p%28%5Ctheta%7CX%2Cy%29)
+instead of a point estimate
+![equation](https://latex.codecogs.com/gif.latex?%5Chat%7B%5Ctheta%7D).
+With increasing data complexity, models with a higher number of
+parameters are usually needed to explain data reasonably well. Methods
+that use models with a fixed number of parameters are called parametric
+methods.
 
 In non-parametric methods, on the other hand, the number of parameters
 depend on the dataset size. For example, in Nadaraya-Watson kernel
-regression, a weight \(w_i\) is assigned to each observed target \(y_i\)
-and for predicting the target value at a new point \(x\) a weighted
-average is computed:
+regression, a weight
+![equation](https://latex.codecogs.com/gif.latex?w_i) is assigned to
+each observed target
+![equation](https://latex.codecogs.com/gif.latex?y_i) and for predicting
+the target value at a new point
+![equation](https://latex.codecogs.com/gif.latex?x) a weighted average
+is computed:
 
-\[f(x) = \sum_{i=1}^N w_i (x) y_i\]
+![equation](https://latex.codecogs.com/gif.latex?f%28x%29%20%3D%20%5Csum_%7Bi%3D1%7D%5EN%20w_i%20%28x%29%20y_i)
 
-\[w_i(x) = \frac{\kappa(x,x_i)}{\sum_{i'=1}^N \kappa(x,x_{i'})}\]
+![equation](https://latex.codecogs.com/gif.latex?w_i%28x%29%20%3D%20%5Cfrac%7B%5Ckappa%28x%2Cx_i%29%7D%7B%5Csum_%7Bi%27%3D1%7D%5EN%20%5Ckappa%28x%2Cx_%7Bi%27%7D%29%7D)
 
-Observations that are closer to \(x\) have a higher weight than
-observations that are further away. Weights are computed from \(x\) and
-observed \(x_i\) with a kernel \(\kappa\). A special case is k-nearest
-neighbor (KNN) where the \(k\) closest observations have a weight
-\(1/k\), and all others have weight \(0\). Non-parametric methods often
-need to process all training data for prediction and are therefore
-slower at inference time than parametric methods. On the other hand,
-training is usually faster as non-parametric models only need to
+Observations that are closer to
+![equation](https://latex.codecogs.com/gif.latex?x) have a higher weight
+than observations that are further away. Weights are computed from
+![equation](https://latex.codecogs.com/gif.latex?x) and observed
+![equation](https://latex.codecogs.com/gif.latex?x_i) with a kernel
+![equation](https://latex.codecogs.com/gif.latex?%5Ckappa). A special
+case is k-nearest neighbor (KNN) where the
+![equation](https://latex.codecogs.com/gif.latex?k) closest observations
+have a weight ![equation](https://latex.codecogs.com/gif.latex?1/k), and
+all others have weight
+![equation](https://latex.codecogs.com/gif.latex?0). Non-parametric
+methods often need to process all training data for prediction and are
+therefore slower at inference time than parametric methods. On the other
+hand, training is usually faster as non-parametric models only need to
 remember training data.
 
 Another example of non-parametric methods are Gaussian processes (GPs).
@@ -46,103 +61,129 @@ this context is known as GP regression but GPs can also be used for
 classification.
 
 A Gaussian process is a random process where any point
-\(x \in \mathbb{R}^d\) is assigned a random variable \(f(x)\) and where
-the joint distribution of a finite number of these variables
-\(p(f(x_1),...,f(x_N))\) is itself Gaussian:
+![equation](https://latex.codecogs.com/gif.latex?x%20%5Cin%20%5Cmathbb%7BR%7D%5Ed)
+is assigned a random variable
+![equation](https://latex.codecogs.com/gif.latex?f%28x%29) and where the
+joint distribution of a finite number of these variables
+![equation](https://latex.codecogs.com/gif.latex?p%28f%28x_1%29%2C...%2Cf%28x_N%29%29)
+is itself Gaussian:
 
-\[p(f|X) = \mathcal{N}(f|\mu, K)\]
+![equation](https://latex.codecogs.com/gif.latex?p%28f%7CX%29%20%3D%20%5Cmathcal%7BN%7D%28f%7C%5Cmu%2C%20K%29)
 
-Where, \* \(f = (f(x_1),...,f(x_N))\) \* \(\mu = (m(x_1),...,m(x_N))\)
-\* \(K_{ij}=\kappa(x_i,x_j)\)
+Where,
 
-\(m\) is the mean function and it is common to use \(m(x) = 0\) as GPs
-are flexible enough to model the mean arbitrarily well. \(\kappa\) is a
-positive definite *kernel function* or *covariance function*. Thus, a
-Gaussian process is a distribution over functions whose shape
-(smoothness, …) is defined by \(K\). If points \(x_i\) and \(x_j\) are
-considered to be similar by the kernel the function values at these
-points, \(f(x_i)\) and \(f(x_j)\), can be expected to be similar too.
+-   ![equation](https://latex.codecogs.com/gif.latex?f%20%3D%20%28f%28x_1%29%2C...%2Cf%28x_N%29%29 "fig:")
+-   ![equation](https://latex.codecogs.com/gif.latex?%5Cmu%20%3D%20%28m%28x_1%29%2C...%2Cm%28x_N%29%29 "fig:")
+-   ![equation](https://latex.codecogs.com/gif.latex?K_%7Bij%7D%3D%5Ckappa%28x_i%2Cx_j%29 "fig:")
 
-Given a training dataset with noise-free function values \(f\) at inputs
-\(X\), a GP prior can be converted into a GP posterior
-\(p(f_\ast | X_\ast, X, f)\) which can then be used to make predictions
-\(f_\ast\) at new inputs \(X_\ast\). By definition of a GP, the joint
-distribution of observed values \(f\) and prediction \(f_\ast\) is again
-a Gaussian which can be partitioned into
+![equation](https://latex.codecogs.com/gif.latex?m) is the mean function
+and it is common to use
+![equation](https://latex.codecogs.com/gif.latex?m%28x%29%20%3D%200) as
+GPs are flexible enough to model the mean arbitrarily well.
+![equation](https://latex.codecogs.com/gif.latex?%5Ckappa) is a positive
+definite *kernel function* or *covariance function*. Thus, a Gaussian
+process is a distribution over functions whose shape (smoothness, …) is
+defined by ![equation](https://latex.codecogs.com/gif.latex?K). If
+points ![equation](https://latex.codecogs.com/gif.latex?x_i) and
+![equation](https://latex.codecogs.com/gif.latex?x_j) are considered to
+be similar by the kernel the function values at these points,
+![equation](https://latex.codecogs.com/gif.latex?f%28x_i%29) and
+![equation](https://latex.codecogs.com/gif.latex?f%28x_j%29), can be
+expected to be similar too.
 
-\[
-\begin{pmatrix}
-f \\
-f_*
-\end{pmatrix}
-\sim \mathcal{N}
-\begin{pmatrix}
-0,
-\begin{pmatrix}
-K & K_* \\
-K_*^T & K_{**}
-\end{pmatrix}
-\end{pmatrix}
-\]
+Given a training dataset with noise-free function values
+![equation](https://latex.codecogs.com/gif.latex?f) at inputs
+![equation](https://latex.codecogs.com/gif.latex?X), a GP prior can be
+converted into a GP posterior
+![equation](https://latex.codecogs.com/gif.latex?p%28f_*%20%7C%20X_*%2C%20X%2C%20f%29)
+which can then be used to make predictions
+![equation](https://latex.codecogs.com/gif.latex?f_*) at new inputs
+![equation](https://latex.codecogs.com/gif.latex?X_*). By definition of
+a GP, the joint distribution of observed values
+![equation](https://latex.codecogs.com/gif.latex?f) and prediction
+![equation](https://latex.codecogs.com/gif.latex?f_*) is again a
+Gaussian which can be partitioned into
 
-Where, \* \(K_* = \kappa(X, X_*)\) \* \(K_{**} = \kappa(X_*, X_*)\)
+![equation](https://latex.codecogs.com/gif.latex?%5Cbegin%7Bpmatrix%7D%20f%20%5C%5C%20f_*%20%5Cend%7Bpmatrix%7D%20%5Csim%20%5Cmathcal%7BN%7D%20%5Cbegin%7Bpmatrix%7D%200%2C%20%5Cbegin%7Bpmatrix%7D%20K%20%26%20K_*%20%5C%5C%20K_*%5ET%20%26%20K_%7B**%7D%20%5Cend%7Bpmatrix%7D%20%5Cend%7Bpmatrix%7D)
 
-With \(N\) training data and \(N_*\) new input data, \* \(K\) is a
-\(N \times N\) matrix \* \(K_*\) is a \(N \times N_*\) matrix \*
-\(K_{**}\) is a \(N_* \times N_*\) matrix
+Where,
+
+-   ![equation](https://latex.codecogs.com/gif.latex?K_*%20%3D%20%5Ckappa%28X%2C%20X_*%29 "fig:")
+-   ![equation](https://latex.codecogs.com/gif.latex?K_%7B**%7D%20%3D%20%5Ckappa%28X_*%2C%20X_*%29 "fig:")
+
+With ![equation](https://latex.codecogs.com/gif.latex?N) training data
+and ![equation](https://latex.codecogs.com/gif.latex?N_*) new input
+data,
+
+-   ![equation](https://latex.codecogs.com/gif.latex?K) is a
+    ![equation](https://latex.codecogs.com/gif.latex?N%20%5Ctimes%20N)
+    matrix
+-   ![equation](https://latex.codecogs.com/gif.latex?K_*) is a
+    ![equation](https://latex.codecogs.com/gif.latex?N%20%5Ctimes%20N_*)
+    matrix
+-   ![equation](https://latex.codecogs.com/gif.latex?K_%7B**%7D) is a
+    ![equation](https://latex.codecogs.com/gif.latex?N_*%20%5Ctimes%20N_*)
+    matrix
 
 Using standard rules for conditioning Gaussians, the predictive
 distribution is given by
 
-\[
-\begin{align}
-p(f_*|X_*,X,f) &= \mathcal{N}(f_*|\mu_*,\Sigma_*) \\
-\mu_* &= K_*^T K^{-1} f \\
-\Sigma_* &= K_{**} - K_*^T K^{-1} K_* 
-\end{align}
-\]
+![equation](https://latex.codecogs.com/gif.latex?p%28f_*%7CX_*%2CX%2Cf%29%20%3D%20%5Cmathcal%7BN%7D%28f_*%7C%5Cmu_*%2C%5CSigma_*%29)
+
+Where,
+
+-   ![equation](https://latex.codecogs.com/gif.latex?%5Cmu_*%20%3D%20K_*%5ET%20K%5E%7B-1%7D%20f "fig:")
+-   ![equation](https://latex.codecogs.com/gif.latex?%5CSigma_*%20%3D%20K_%7B**%7D%20-%20K_*%5ET%20K%5E%7B-1%7D%20K_* "fig:")
 
 If we have a training dataset with noisy function values
-\(y = f + \epsilon\) where noise
-\(\epsilon \sim \mathcal{N}(0, \sigma_y^2 I)\) is independently added to
-each observation then the predictive distribution is given by
+![equation](https://latex.codecogs.com/gif.latex?y%20%3D%20f%20+%20%5Cepsilon)
+where noise
+![equation](https://latex.codecogs.com/gif.latex?%5Cepsilon%20%5Csim%20%5Cmathcal%7BN%7D%280%2C%20%5Csigma_y%5E2%20I%29)
+is independently added to each observation then the predictive
+distribution is given by
 
-\[
-\begin{align}
-p(f_*|X_*,X,y) &= \mathcal{N}(f_*|\mu_*,\Sigma_*) \\
-\mu_* &= K_*^T K_y^{-1} y \\
-\Sigma_* &= K_{**} - K_*^T K_y^{-1} K_* 
-\end{align}
-\]
+![equation](https://latex.codecogs.com/gif.latex?p%28f_*%7CX_*%2CX%2Cy%29%20%3D%20%5Cmathcal%7BN%7D%28f_*%7C%5Cmu_*%2C%5CSigma_*%29)
 
-where \(K_y = K + \sigma_y^2I\)
+Where,
+
+-   ![equation](https://latex.codecogs.com/gif.latex?%5Cmu_*%20%3D%20K_*%5ET%20K_y%5E%7B-1%7D%20y "fig:")
+-   ![equation](https://latex.codecogs.com/gif.latex?%5CSigma_*%20%3D%20K_%7B**%7D%20-%20K_*%5ET%20K_y%5E%7B-1%7D%20K_* "fig:")
+-   ![equation](https://latex.codecogs.com/gif.latex?K_y%20%3D%20K%20+%20%5Csigma_y%5E2I "fig:")
 
 Although Equation (6) covers noise in training data, it is still a
-distribution over noise-free predictions \(f_*\). To additionally
-include noise \(\epsilon\) into predictions \(y_*\) we have to add
-\(\sigma_y^2\) to the diagonal of \(\Sigma_*\)
+distribution over noise-free predictions
+![equation](https://latex.codecogs.com/gif.latex?f_*). To additionally
+include noise
+![equation](https://latex.codecogs.com/gif.latex?%5Cepsilon) into
+predictions ![equation](https://latex.codecogs.com/gif.latex?y_*) we
+have to add
+![equation](https://latex.codecogs.com/gif.latex?%5Csigma_y%5E2) to the
+diagonal of ![equation](https://latex.codecogs.com/gif.latex?%5CSigma_*)
 
-\[p(y_*|X_*,X,y) = \mathcal{N}(y_*|\mu_*,\Sigma_* + \sigma_y^2I)\]
+![equation](https://latex.codecogs.com/gif.latex?p%28y_*%7CX_*%2CX%2Cy%29%20%3D%20%5Cmathcal%7BN%7D%28y_*%7C%5Cmu_*%2C%5CSigma_*%20+%20%5Csigma_y%5E2I%29)
 
-using the definitions of \(\mu_*\) and \(\Sigma_*\) from Equations (7)
-and (8), respectively. This is the minimum we need to know for
-implementing Gaussian processes and applying them to regression
+using the definitions of
+![equation](https://latex.codecogs.com/gif.latex?%5Cmu_*) and
+![equation](https://latex.codecogs.com/gif.latex?%5CSigma_*) from
+Equations (7) and (8), respectively. This is the minimum we need to know
+for implementing Gaussian processes and applying them to regression
 problems. For further details, please consult the literature in the
-References section. The next section shows how to implement GPs with
-plain NumPy from scratch, later sections demonstrate how to use GP
-implementations from scikit-learn and GPy.
+References section. The next section shows how to implement GPs from
+scratch.
 
 ## Implementation
 
 Here, we will use the squared exponential kernel, also known as Gaussian
-kernel or RBF
-kernel:
+kernel or RBF kernel:
 
-\[\kappa(x_i, x_j) = \sigma_f^2 \exp \left(\frac{-|x_i - x_j|^2}{2l^2}\right)\]
+![equation](https://latex.codecogs.com/gif.latex?%5Ckappa%28x_i%2C%20x_j%29%20%3D%20%5Csigma_f%5E2%20%5Cexp%20%5Cleft%28%5Cfrac%7B-%7Cx_i%20-%20x_j%7C%5E2%7D%7B2l%5E2%7D%5Cright%29)
 
-The length parameter \(l\) controls the smoothness of the function and
-\(\sigma_f\) the vertical variation. For simplicity, we use the same
-length parameter \(l\) for all input dimensions (isotropic kernel).
+The length parameter ![equation](https://latex.codecogs.com/gif.latex?l)
+controls the smoothness of the function and
+![equation](https://latex.codecogs.com/gif.latex?%5Csigma_f) the
+vertical variation. For simplicity, we use the same length parameter
+![equation](https://latex.codecogs.com/gif.latex?l) for all input
+dimensions (isotropic kernel).
 
 ``` r
 gaussian_kernel <- function(x, y, l = 1.0, sigma_f = 1.0) {
@@ -162,12 +203,14 @@ some examples.
 ### Prior
 
 Let’s first define a prior over functions with mean zero and a
-covariance matrix computed with kernel parameters \(l = 1\) and
-\(\sigma_f = 1\). To draw random functions from that GP we draw random
-samples from the corresponding multivariate normal. The following
-example draws three random samples and plots it together with the zero
-mean and the 95% confidence interval (computed from the diagonal of the
-covariance matrix).
+covariance matrix computed with kernel parameters
+![equation](https://latex.codecogs.com/gif.latex?l%20%3D%201) and
+![equation](https://latex.codecogs.com/gif.latex?%5Csigma_f%20%3D%201).
+To draw random functions from that GP we draw random samples from the
+corresponding multivariate normal. The following example draws three
+random samples and plots it together with the zero mean and the 95%
+confidence interval (computed from the diagonal of the covariance
+matrix).
 
 ``` r
 # Finite number of points
@@ -295,17 +338,24 @@ plot_gp(mu_s, cov_s, X, X_train, Y_train, samples)
 
 ### Effect of kernel parameters and noise parameter
 
-The following example shows the effect of kernel parameters \(l\) and
-\(\sigma_f\) as well as the noise parameter \(\sigma_f\). Higher \(l\)
-values lead to smoother functions and therefore to coarser
-approximations of the training data. Lower \(l\) values make functions
-more wiggly with wide confidence intervals between training data points.
-\(\sigma_f\) controls the vertical variation of functions drawn from the
-GP. This can be seen by the wide confidence intervals outside the
-training data region in the right figure of the second row. \(\sigma_y\)
-represents the amount of noise in the training data. Higher \(\sigma_y\)
-values make more coarse approximations which avoids overfitting to noisy
-data.
+The following example shows the effect of kernel parameters
+![equation](https://latex.codecogs.com/gif.latex?l) and
+![equation](https://latex.codecogs.com/gif.latex?%5Csigma_f) as well as
+the noise parameter
+![equation](https://latex.codecogs.com/gif.latex?%5Csigma_f). Higher
+![equation](https://latex.codecogs.com/gif.latex?l) values lead to
+smoother functions and therefore to coarser approximations of the
+training data. Lower ![equation](https://latex.codecogs.com/gif.latex?l)
+values make functions more wiggly with wide confidence intervals between
+training data points.
+![equation](https://latex.codecogs.com/gif.latex?%5Csigma_f) controls
+the vertical variation of functions drawn from the GP. This can be seen
+by the wide confidence intervals outside the training data region in the
+right figure of the second row.
+![equation](https://latex.codecogs.com/gif.latex?%5Csigma_y) represents
+the amount of noise in the training data. Higher
+![equation](https://latex.codecogs.com/gif.latex?%5Csigma_y) values make
+more coarse approximations which avoids overfitting to noisy data.
 
 ``` r
 params = as.matrix(
@@ -338,15 +388,17 @@ do.call('grid.arrange', c(plot_list, ncol = 2))
 ![](01_gaussian-process_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 Optimal values for these parameters can be estimated by maximizing the
-marginal log-likelihood which is given
-by
+marginal log-likelihood which is given by
 
-\[\log p(y|X) = \log \mathcal{N}(y|0,K_y) = -\frac{1}{2}y^T K_y^{-1} y - \frac{1}{2}\log|K_y| - \frac{N}{2}\log(2 \pi)\]
+![equation](https://latex.codecogs.com/gif.latex?%5Clog%20p%28y%7CX%29%20%3D%20%5Clog%20%5Cmathcal%7BN%7D%28y%7C0%2CK_y%29%20%3D%20-%5Cfrac%7B1%7D%7B2%7Dy%5ET%20K_y%5E%7B-1%7D%20y%20-%20%5Cfrac%7B1%7D%7B2%7D%5Clog%7CK_y%7C%20-%20%5Cfrac%7BN%7D%7B2%7D%5Clog%282%20%5Cpi%29)
 
 In the following we will minimize the negative marginal log-likelihood
-w.r.t parameters \(l\) and \(\sigma_f\). \(\sigma_y\) is set to the
-known noise level of the data. If the noise level is unknown,
-\(\sigma_y\) can be estimated as well along with the other parameters.
+w.r.t parameters ![equation](https://latex.codecogs.com/gif.latex?l) and
+![equation](https://latex.codecogs.com/gif.latex?%5Csigma_f).
+![equation](https://latex.codecogs.com/gif.latex?%5Csigma_y) is set to
+the known noise level of the data. If the noise level is unknown,
+![equation](https://latex.codecogs.com/gif.latex?%5Csigma_y) can be
+estimated as well along with the other parameters.
 
 ``` r
 nll_fn <- function(X_train, Y_train, noise, kernel) {
@@ -376,14 +428,14 @@ nll_fn <- function(X_train, Y_train, noise, kernel) {
 ```
 
     ## $par
-    ## [1] 0.8055183 0.4922088
+    ## [1] 1.1624787 0.4252034
     ## 
     ## $value
-    ## [1] 6.542562
+    ## [1] 4.930078
     ## 
     ## $counts
     ## function gradient 
-    ##       12       12 
+    ##        9        9 
     ## 
     ## $convergence
     ## [1] 0

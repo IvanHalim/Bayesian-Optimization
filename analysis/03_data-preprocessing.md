@@ -11,15 +11,13 @@ Data is acquired from New York Stock Exchange on Kaggle (
 <https://www.kaggle.com/dgawlik/nyse> ). We will only use data from
 January to March of 2015 for illustration.
 
-  - `date`: date
-  - `symbol`: symbol of company stock
-  - `open`: price at the open of the day
-  - `close`: price at the end of the day
-  - `low`: lowest price of the day
-  - `high`: highest price of the day
-  - `volume`: number of transaction at the day
-
-<!-- end list -->
+-   `date`: date
+-   `symbol`: symbol of company stock
+-   `open`: price at the open of the day
+-   `close`: price at the end of the day
+-   `low`: lowest price of the day
+-   `high`: highest price of the day
+-   `volume`: number of transaction at the day
 
 ``` r
 nyse <- read_csv(here("data", "prices.csv"))
@@ -162,10 +160,11 @@ head(mean_stock)
     ## 2 ORLY   0.00210
     ## 3 ULTA   0.00297
 
-The value of \(R_f\) is acquired from the latest interest rate on a
-three-month U.S. Treasury bill. Since the data is from 2016, we will use
-data from 2015 (Use data from March 27, 2015), which is 0.04%. The rate
-is acquired from <https://ycharts.com/indicators/3_month_t_bill>.
+The value of ![equation](https://latex.codecogs.com/gif.latex?R_f) is
+acquired from the latest interest rate on a three-month U.S. Treasury
+bill. Since the data is from 2016, we will use data from 2015 (Use data
+from March 27, 2015), which is 0.04%. The rate is acquired from
+<https://ycharts.com/indicators/3_month_t_bill>.
 
 ``` r
 rf <- 0.04/100
