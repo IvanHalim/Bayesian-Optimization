@@ -515,7 +515,7 @@ make it stricter by using the naive implementation, but at the cost of
 being less stable.
 
 ``` r
-bayes_finance_allnorm <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
+bayes_finance_naive <- bayesian_optimization(FUN=sharpe_ratio, lower=lower, upper=upper,
                                         init_grid_dt=search_grid, n_iter=1, naive=TRUE)
 ```
 
