@@ -182,7 +182,7 @@ nll_fn <- function(X_train, Y_train, noise, kernel, naive=FALSE) {
       QR <- qr(X)
       Q <- qr.Q(QR)
       R <- qr.R(QR)
-      solve(R) %*% t(Q) %*% Y
+      solve(R) %*% Conj(t(Q)) %*% Y
     }
     
     K <- kernel(X_train, X_train, l=theta[1], sigma_f=theta[2]) +
