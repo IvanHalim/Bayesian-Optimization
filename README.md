@@ -67,7 +67,7 @@ Where,
     Mean function of each
     ![equation](https://latex.codecogs.com/gif.latex?x_i). It is common to use
     ![equation](https://latex.codecogs.com/gif.latex?m%28x%29%20%3D%200) as  Gaussian Process is flexible enough to model the mean arbitrarily well
-  - ![equation](https://latex.codecogs.com/gif.latex?%5CSigma_0%28x_%7Bi%3Ak%7D%2C%20x_%7Bi%3AK%7D%29):
+  - ![equation](https://latex.codecogs.com/gif.latex?%5CSigma_0%28x_%7Bi%3Ak%7D%2C%20x_%7Bi%3Ak%7D%29):
     Kernel function/covariance function at each pair of
     ![equation](https://latex.codecogs.com/gif.latex?x_i)
 
