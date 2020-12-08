@@ -47,11 +47,14 @@ samples drawn from the black box function
 
 ### Gaussian Process
 
-Gaussian Process is a probabilistic model to approximate based on a
+Gaussian Process is a probabilistic model to approximate, not only the shape
+of a function but also its distribution, based on a
 given set of data points. Gaussian Process models a function as a set of
 random variables whose joint distribution is a multivariate normal
 distribution, with a specific mean vector and covariance
 matrix.
+
+Unlike a simple multivariate normal distribution, which is parameterized by a mean vector and covariance matrix, a Gaussian process is parameterized by a mean function and covariance function. The mean and covariance functions apply to vectors of inputs and return a mean vector and covariance matrix which provide the mean and covariance of the outputs corresponding to those input points in the functions drawn from the process.
 
 ![equation](https://latex.codecogs.com/gif.latex?f%28x_%7B1%3Ak%7D%29%20%5Csim%20%5Cmathcal%7BN%7D%28%5Cmu_0%28x_%7B1%3Ak%7D%29%2C%20%5CSigma_0%28x_%7B1%3Ak%7D%2Cx_%7B1%3Ak%7D%29%29)
 
