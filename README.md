@@ -1,4 +1,4 @@
-Optimal Asset Allocation based on Bayesian Optimization
+Optimal Asset Distribution based on Bayesian Optimization
 ================
 
 The purpose of this project is to gain a deeper understanding of
