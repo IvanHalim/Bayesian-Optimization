@@ -547,5 +547,4 @@ distributed.
 [3] Arga Adyatama. [Introduction to Bayesian Optimization](https://rpubs.com/Argaadya/bayesian-optimization)<br />
 [4] Mikhail Popov. [A tutorial on Bayesian optimization in R](https://bearloga.github.io/bayesopt-tutorial-r/)<br />
 [5] Arga Adyatama. [Introduction to Particle Swarm Optimization](https://rpubs.com/Argaadya/intro-PSO)<br />
-[6] Matthew Hoffman, Eric Brochu & Nando de Freitas (2011). [Portfolio Allocation for Bayesian Optimization](https://www.cs.ubc.ca/~nando/papers/uaiBayesOpt.pdf)<br />
-[7] Zhu, H., Wang, Y., Wang, K., & Chen, Y. (2011). [Particle Swarm Optimization (PSO) for the constrained portfolio optimization problem](https://www.sciencedirect.com/science/article/abs/pii/S0957417411002818?via%3Dihub)
+[6] Zhu, H., Wang, Y., Wang, K., & Chen, Y. (2011). [Particle Swarm Optimization (PSO) for the constrained portfolio optimization problem](https://www.sciencedirect.com/science/article/abs/pii/S0957417411002818?via%3Dihub)
